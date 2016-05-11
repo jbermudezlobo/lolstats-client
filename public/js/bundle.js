@@ -54,10 +54,6 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _lodash = __webpack_require__(168);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
 	var _Main = __webpack_require__(170);
 
 	var _Main2 = _interopRequireDefault(_Main);
@@ -74,6 +70,7 @@
 	document.getElementsByTagName('title')[0] = config.appTitle;
 
 	config.styleData = JSON.parse(document.getElementById(config.appDataContainer).innerHTML);
+	document.getElementById(config.appDataContainer).innerHTML = "";
 
 	_reactDom2.default.render(_react2.default.createElement(_Main2.default, { style: config.styleData }), document.getElementById(config.appContainer));
 
