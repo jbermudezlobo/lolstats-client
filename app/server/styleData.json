@@ -7,12 +7,13 @@
     "show_champion": true,
     "show_winrate": true,
     "show_tier": true,
+    "show_web": false,
     "align": "left",
     "colors": {
       "back_color": "rgba(0, 0, 0, 0.6)",
       "text_color": "rgba(255, 255, 255, 1)",
       "back_border_color": "rgba(0, 0, 0, 0.8)",
-      "champ_border_color": "rgba(255, 255, 255, 0.7)",
+      "champ_border_color": "rgba(0, 0, 0, 0.8)",
       "back_shadow_color": "rgba(0, 0, 0, 0.1)",
       "champ_shadow_color": "rgba(0, 0, 0, 0.1)",
       "text_shadow_color": "rgba(0, 0, 0, 0.9)"
@@ -20,7 +21,7 @@
     "borders": {
       "back_border_width": "2px",
       "back_border_radius": "5px",
-      "champ_border_width": "1px",
+      "champ_border_width": "2px",
       "champ_border_radius": "50%"
     },
     "shadows": {

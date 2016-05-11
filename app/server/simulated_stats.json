@@ -1,4 +1,4 @@
-export default `{
+{
   "error": false,
   "token": "AA123BB456CC",
   "type": 0,
@@ -6,8 +6,8 @@ export default `{
     "name": "Lobo Bot",
     "id": 12345,
     "server": "euw",
-    "tier": "GOLD",
-    "division": "IV",
+    "tier": "CHALLENGER",
+    "division": "I",
     "points": 100,
     "wins": 1040,
     "losses": 1000,
@@ -30,4 +30,3 @@ export default `{
     ]
   }
 }
-`;

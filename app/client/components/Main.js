@@ -1,8 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 import ChampSlider from './ChampSlider';
-import stats from './../utils/simulated_stats';
-import tierStyles from './../utils/tiers_colors';
+// import stats from './../utils/simulated_stats';
+import TierColors from './../utils/TierColors';
 
 class Main extends React.Component {
   constructor(props) {
@@ -11,12 +11,12 @@ class Main extends React.Component {
     const customHeight = d.show_winrate || (!d.show_champion && !d.show_tier) ? '20px' : '30px';
     this.state = {
       visible: false,
-
       token: this.props.style.token,
       load_animation: d.load_animation,
       show_champion: d.show_champion,
       show_winrate: d.show_winrate,
       show_tier: d.show_tier,
+      show_web: d.show_web,
       align: d.align,
       main: {
         backgroundColor: d.colors.back_color,
@@ -46,6 +46,7 @@ class Main extends React.Component {
   };
 
   getStats() {
+    /*
     const _stats = JSON.parse(stats);
     const tiercolor = (_.find(tierStyles, (elem) => elem.tier === _stats.stats.tier)).color;
     this.setState({
@@ -56,21 +57,25 @@ class Main extends React.Component {
         height: this.state.tier.height,
         color: tiercolor
       }
-    });
-    /*
+    });*/
     console.log('Getting Stats...');
-    fetch('http://test.lobobot.com/link/getStatsTest.php',{
-      method: 'get'
+    fetch('/stats',{
+      method: 'GET',
+      headers: {
+        Accept: 'application/json'
+      }
     })
     .then((res) => res.json())
     .then((data) => {
       console.log(data);
       if(!data.error) {
-        const tiercolor = (_.find(tierStyles, (elem) => elem.tier === data.stats.tier)).color;
+        const tiercolor = (_.find(TierColors, (elem) => elem.tier === data.stats.tier)).color;
         this.setState({
           visible: true,
           stats: data.stats,
           tier: {
+            lineHeight: this.state.tier.lineHeight,
+            height: this.state.tier.height,
             color: tiercolor
           }
         });
@@ -81,7 +86,6 @@ class Main extends React.Component {
     .catch((error) => {
       console.log(error);
     })
-    */
   }
 
   componentDidMount() {
@@ -92,7 +96,7 @@ class Main extends React.Component {
   render() {
     if (this.state.visible) {
       const percent = (this.state.stats.wins * 100 / (this.state.stats.wins + this.state.stats.losses)).toFixed(1);
-      const tiercolor = (_.find(tierStyles, (elem) => elem.tier === this.state.stats.tier)).color;
+      // const tiercolor = (_.find(TierColors, (elem) => elem.tier === this.state.stats.tier)).color;
       return (
         <div id='main' style={this.state.main} className={`animated ${this.state.load_animation}`}>
           {
@@ -113,9 +117,9 @@ class Main extends React.Component {
                 this.state.show_winrate ?
                   (
                     <div className='row' id='summoner-winratio'>
-                      <span style={{ color: percent < 50 ? 'red' : 'green' }}>{percent}%</span>{' - '}
-                      <span style={{ color: 'green' }}>{this.state.stats.wins}W</span>{' / '}
-                      <span style={{ color: 'red' }}>{this.state.stats.losses}L</span>
+                      <span style={{ color: percent < 50 ? 'red' : '#39e600' }}>{percent}%</span>{' - '}
+                      <span style={{ color: '#39e600' }}>{this.state.stats.wins}W</span>{' / '}
+                      <span style={{ color: '#e60000' }}>{this.state.stats.losses}L</span>
                     </div>
                   ) : null
               }
@@ -131,9 +135,14 @@ class Main extends React.Component {
                 </div>
               ) : null
           }
-        <div style={{ position: 'absolute', left: '0px', top: '75px', fontSize: '12px', color: 'black', textShadow: '1px 1px 1px green' }}>
-          {}
-        </div>
+          {
+            this.state.show_web ?
+            (
+              <div style={{ position: 'absolute', left: '0px', top: '75px', fontSize: '13px', color: this.state.summoner.color }}>
+                {'http://www.lobobot.com'}
+              </div>
+            ) : null
+          }
         </div>
       )
     } else { return <i className="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ color: 'grey', margin: 20 }}></i>; }

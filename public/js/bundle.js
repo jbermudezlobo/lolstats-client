@@ -20189,13 +20189,9 @@
 
 	var _ChampSlider2 = _interopRequireDefault(_ChampSlider);
 
-	var _simulated_stats = __webpack_require__(173);
+	var _TierColors = __webpack_require__(173);
 
-	var _simulated_stats2 = _interopRequireDefault(_simulated_stats);
-
-	var _tiers_colors = __webpack_require__(174);
-
-	var _tiers_colors2 = _interopRequireDefault(_tiers_colors);
+	var _TierColors2 = _interopRequireDefault(_TierColors);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20204,6 +20200,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	// import stats from './../utils/simulated_stats';
+
 
 	var Main = function (_React$Component) {
 	  _inherits(Main, _React$Component);
@@ -20217,12 +20215,12 @@
 	    var customHeight = d.show_winrate || !d.show_champion && !d.show_tier ? '20px' : '30px';
 	    _this.state = {
 	      visible: false,
-
 	      token: _this.props.style.token,
 	      load_animation: d.load_animation,
 	      show_champion: d.show_champion,
 	      show_winrate: d.show_winrate,
 	      show_tier: d.show_tier,
+	      show_web: d.show_web,
 	      align: d.align,
 	      main: {
 	        backgroundColor: d.colors.back_color,
@@ -20255,10 +20253,11 @@
 	  _createClass(Main, [{
 	    key: 'getStats',
 	    value: function getStats() {
-	      var _stats = JSON.parse(_simulated_stats2.default);
-	      var tiercolor = _lodash2.default.find(_tiers_colors2.default, function (elem) {
-	        return elem.tier === _stats.stats.tier;
-	      }).color;
+	      var _this2 = this;
+
+	      /*
+	      const _stats = JSON.parse(stats);
+	      const tiercolor = (_.find(tierStyles, (elem) => elem.tier === _stats.stats.tier)).color;
 	      this.setState({
 	        visible: true,
 	        stats: _stats.stats,
@@ -20267,32 +20266,36 @@
 	          height: this.state.tier.height,
 	          color: tiercolor
 	        }
-	      });
-	      /*
+	      });*/
 	      console.log('Getting Stats...');
-	      fetch('http://test.lobobot.com/link/getStatsTest.php',{
-	        method: 'get'
-	      })
-	      .then((res) => res.json())
-	      .then((data) => {
+	      fetch('/stats', {
+	        method: 'GET',
+	        headers: {
+	          Accept: 'application/json'
+	        }
+	      }).then(function (res) {
+	        return res.json();
+	      }).then(function (data) {
 	        console.log(data);
-	        if(!data.error) {
-	          const tiercolor = (_.find(tierStyles, (elem) => elem.tier === data.stats.tier)).color;
-	          this.setState({
+	        if (!data.error) {
+	          var tiercolor = _lodash2.default.find(_TierColors2.default, function (elem) {
+	            return elem.tier === data.stats.tier;
+	          }).color;
+	          _this2.setState({
 	            visible: true,
 	            stats: data.stats,
 	            tier: {
+	              lineHeight: _this2.state.tier.lineHeight,
+	              height: _this2.state.tier.height,
 	              color: tiercolor
 	            }
 	          });
 	        } else {
 	          console.log('Error');
 	        }
-	      })
-	      .catch((error) => {
+	      }).catch(function (error) {
 	        console.log(error);
-	      })
-	      */
+	      });
 	    }
 	  }, {
 	    key: 'componentDidMount',
@@ -20303,13 +20306,9 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this2 = this;
-
 	      if (this.state.visible) {
 	        var percent = (this.state.stats.wins * 100 / (this.state.stats.wins + this.state.stats.losses)).toFixed(1);
-	        var tiercolor = _lodash2.default.find(_tiers_colors2.default, function (elem) {
-	          return elem.tier === _this2.state.stats.tier;
-	        }).color;
+	        // const tiercolor = (_.find(TierColors, (elem) => elem.tier === this.state.stats.tier)).color;
 	        return _react2.default.createElement(
 	          'div',
 	          { id: 'main', style: this.state.main, className: 'animated ' + this.state.load_animation },
@@ -20339,21 +20338,21 @@
 	                { className: 'row', id: 'summoner-winratio' },
 	                _react2.default.createElement(
 	                  'span',
-	                  { style: { color: percent < 50 ? 'red' : 'green' } },
+	                  { style: { color: percent < 50 ? 'red' : '#39e600' } },
 	                  percent,
 	                  '%'
 	                ),
 	                ' - ',
 	                _react2.default.createElement(
 	                  'span',
-	                  { style: { color: 'green' } },
+	                  { style: { color: '#39e600' } },
 	                  this.state.stats.wins,
 	                  'W'
 	                ),
 	                ' / ',
 	                _react2.default.createElement(
 	                  'span',
-	                  { style: { color: 'red' } },
+	                  { style: { color: '#e60000' } },
 	                  this.state.stats.losses,
 	                  'L'
 	                )
@@ -20369,7 +20368,11 @@
 	              _react2.default.createElement('div', { id: 'tier-icon', style: { backgroundImage: 'url(./img/tiers/' + this.state.stats.tier + '.png)' } })
 	            )
 	          ) : null,
-	          _react2.default.createElement('div', { style: { position: 'absolute', left: '0px', top: '75px', fontSize: '12px', color: 'black', textShadow: '1px 1px 1px green' } })
+	          this.state.show_web ? _react2.default.createElement(
+	            'div',
+	            { style: { position: 'absolute', left: '0px', top: '75px', fontSize: '13px', color: this.state.summoner.color } },
+	            'http://www.lobobot.com'
+	          ) : null
 	        );
 	      } else {
 	        return _react2.default.createElement('i', { className: 'fa fa-spinner fa-pulse fa-3x fa-fw', style: { color: 'grey', margin: 20 } });
@@ -36674,23 +36677,12 @@
 /* 173 */
 /***/ function(module, exports) {
 
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = "{\n  \"error\": false,\n  \"token\": \"AA123BB456CC\",\n  \"type\": 0,\n  \"stats\": {\n    \"name\": \"Lobo Bot\",\n    \"id\": 12345,\n    \"server\": \"euw\",\n    \"tier\": \"GOLD\",\n    \"division\": \"IV\",\n    \"points\": 100,\n    \"wins\": 1040,\n    \"losses\": 1000,\n    \"champs\": [\n      {\n        \"points\": 12144,\n        \"champion_id\": 1,\n        \"img\": \"MASTER\"\n      },\n      {\n        \"points\": 2523,\n        \"champion_id\": 2,\n        \"img\": \"SILVER\"\n      },\n      {\n        \"points\": 1000,\n        \"champion_id\": 3,\n        \"img\": \"GOLD\"\n      }\n    ]\n  }\n}\n";
-
-/***/ },
-/* 174 */
-/***/ function(module, exports) {
-
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = [{ tier: 'BRONZE', color: '#673f25' }, { tier: 'SILVER', color: '#879391' }, { tier: 'GOLD', color: '#FFD300' }, { tier: 'PLATINUM', color: '#008080' }, { tier: 'DIAMOND', color: '#00aaff' }, { tier: 'MASTER', color: '#bcd0ca)' }, { tier: 'CHALLENGER', color: '#ffd149' }];
+	exports.default = [{ tier: 'BRONZE', color: '#c68c53' }, { tier: 'SILVER', color: '#afb6b5' }, { tier: 'GOLD', color: '#FFD300' }, { tier: 'PLATINUM', color: '#00b3b3' }, { tier: 'DIAMOND', color: '#00aaff' }, { tier: 'MASTER', color: '#bcd0ca)' }, { tier: 'CHALLENGER', color: '#ffd149' }];
 
 /***/ }
 /******/ ]);

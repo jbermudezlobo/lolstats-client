@@ -5,7 +5,7 @@
   "main": "app/server/server.js",
   "scripts": {
     "dev": "nodemon --watch app/server/",
-    "min": "uglifyjs ./public/app.js -o ./public/app.min.js",
+    "min": "uglifyjs ./public/js/bundle.js -o ./public/js/bundle.min.js",
     "watch": "webpack -w"
   },
   "author": "",
