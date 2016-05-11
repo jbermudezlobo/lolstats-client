@@ -14,17 +14,17 @@ export default `{
     "champs": [
       {
         "points": 12144,
-        "champion_id": 50,
+        "champion_id": 1,
         "img": "MASTER"
       },
       {
         "points": 2523,
-        "champion_id": 100,
+        "champion_id": 2,
         "img": "SILVER"
       },
       {
         "points": 1000,
-        "champion_id": 10,
+        "champion_id": 3,
         "img": "GOLD"
       }
     ]
