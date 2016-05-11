@@ -1,11 +1,16 @@
-# lolstats-client
+# LOL Stats
 LOL Stats 3.0 - Client
 
 ## Usage
 
-npm install
+Install node modules
 
-npm run dev
-npm run watch
+`npm install`
 
-http://localhost:3000
+Run
+
+`npm run dev`
+
+`npm run watch`
+
+Go to http://localhost:3000
