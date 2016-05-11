@@ -36690,7 +36690,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = [{ tier: 'BRONZE', color: 'orange' }, { tier: 'SILVER', color: 'grey' }, { tier: 'GOLD', color: 'yellow' }, { tier: 'PLATINUM', color: 'lightblue' }, { tier: 'DIAMOND', color: 'cian' }, { tier: 'MASTER', color: 'lightgrey' }, { tier: 'CHALLENGER', color: 'gold' }];
+	exports.default = [{ tier: 'BRONZE', color: '#673f25' }, { tier: 'SILVER', color: '#879391' }, { tier: 'GOLD', color: '#FFD300' }, { tier: 'PLATINUM', color: '#008080' }, { tier: 'DIAMOND', color: '#00aaff' }, { tier: 'MASTER', color: '#bcd0ca)' }, { tier: 'CHALLENGER', color: '#ffd149' }];
 
 /***/ }
 /******/ ]);
