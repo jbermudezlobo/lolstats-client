@@ -1,0 +1,31 @@
+{
+  "error": false,
+  "token": "AA123BB456CC",
+  "type": 0,
+  "data": {
+    "load_animation": "flipInY",
+    "show_champion": true,
+    "show_winrate": true,
+    "show_tier": true,
+    "colors": {
+      "back_color": "rgba(0, 0, 150, 0.6)",
+      "text_color": "rgba(0, 255, 255, 1)",
+      "back_border_color": "rgba(255, 255, 255, 0.7)",
+      "champ_border_color": "rgba(255, 255, 255, 0.7)",
+      "back_shadow_color": "rgba(0, 0, 0, 1)",
+      "champ_shadow_color": "rgba(255, 0, 0, 0.9)",
+      "text_shadow_color": "rgba(0, 0, 0, 0.9)"
+    },
+    "borders": {
+      "back_border_width": "2px",
+      "back_border_radius": "10px",
+      "champ_border_width": "2px",
+      "champ_border_radius": "50%"
+    },
+    "shadows": {
+      "back_shadow": "0px 0px 10px",
+      "champ_shadow": "0px 0px 2px",
+      "text_shadow": "1px 1px 1px"
+    }
+  }
+}

@@ -1,0 +1,94 @@
+@font-face {
+  src: url(../fonts/Montserrat-Regular.ttf);
+  font-family: "Montserrat";
+}
+body, html {
+  padding: 0;
+  margin: 0;
+  font-family: 'Montserrat';
+  background-color: transparent;
+  color: white;
+}
+
+#main {
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: solid 2px rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  margin: 15px;
+}
+
+.col-left, .col-right{
+  position: relative;
+  float: left;
+  width: 70px;
+  height: 70px;
+}
+
+.col-left {
+  margin-right: -15px !important;
+}
+
+.col-center {
+  margin: 5px 15px;
+  float: left;
+  min-width: 100px;
+  padding: 0px;
+}
+
+.col-right {
+  margin-left: -15px !important;
+}
+
+.mastery-icon {
+  border: solid 2px rgba(255, 255, 255, 0.6);
+  border-radius: 7px;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 55px;
+  height: 55px;
+  /*background-image: url(http://ddragon.leagueoflegends.com/cdn/6.9.1/img/champion/Aatrox.png);*/
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.mastery-text{
+  border: solid 1px rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.current-champ{
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 100%;
+  height: 100%;
+}
+#summoner-winratio {
+  color: white;
+}
+
+#tier-icon {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 60px;
+  height: 60px;
+  background-image: url(../img/tiers/MASTER.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.row{
+  height: 20px;
+  line-height: 20px;
+}
