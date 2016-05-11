@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Main from './Main';
 import _ from 'lodash';
+
+import Main from './components/Main';
 
 const config = {
   appTitle: 'Stats',

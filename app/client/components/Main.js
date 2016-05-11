@@ -1,8 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 import ChampSlider from './ChampSlider';
-import stats from './simulated_stats';
-import tierStyles from './tiers_colors';
+import stats from './../utils/simulated_stats';
+import tierStyles from './../utils/tiers_colors';
 
 class Main extends React.Component {
   constructor(props) {
@@ -11,6 +11,7 @@ class Main extends React.Component {
     const customHeight = d.show_winrate || (!d.show_champion && !d.show_tier) ? '20px' : '30px';
     this.state = {
       visible: false,
+
       token: this.props.style.token,
       load_animation: d.load_animation,
       show_champion: d.show_champion,
@@ -125,7 +126,7 @@ class Main extends React.Component {
               (
                 <div className='col-right'>
                   <div className='icon-container'>
-                    <div id='tier-icon' style={{ backgroundImage: `url(../public/img/tiers/${this.state.stats.tier}.png)` }}></div>
+                    <div id='tier-icon' style={{ backgroundImage: `url(./img/tiers/${this.state.stats.tier}.png)` }}></div>
                   </div>
                 </div>
               ) : null

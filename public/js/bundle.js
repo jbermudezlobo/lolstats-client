@@ -54,13 +54,13 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _Main = __webpack_require__(168);
-
-	var _Main2 = _interopRequireDefault(_Main);
-
-	var _lodash = __webpack_require__(169);
+	var _lodash = __webpack_require__(168);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _Main = __webpack_require__(170);
+
+	var _Main2 = _interopRequireDefault(_Main);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20172,226 +20172,6 @@
 /* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _lodash = __webpack_require__(169);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _ChampSlider = __webpack_require__(171);
-
-	var _ChampSlider2 = _interopRequireDefault(_ChampSlider);
-
-	var _simulated_stats = __webpack_require__(172);
-
-	var _simulated_stats2 = _interopRequireDefault(_simulated_stats);
-
-	var _tiers_colors = __webpack_require__(173);
-
-	var _tiers_colors2 = _interopRequireDefault(_tiers_colors);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Main = function (_React$Component) {
-	  _inherits(Main, _React$Component);
-
-	  function Main(props) {
-	    _classCallCheck(this, Main);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
-
-	    var d = _this.props.style.data;
-	    var customHeight = d.show_winrate || !d.show_champion && !d.show_tier ? '20px' : '30px';
-	    _this.state = {
-	      visible: false,
-	      token: _this.props.style.token,
-	      load_animation: d.load_animation,
-	      show_champion: d.show_champion,
-	      show_winrate: d.show_winrate,
-	      show_tier: d.show_tier,
-	      align: d.align,
-	      main: {
-	        backgroundColor: d.colors.back_color,
-	        borderColor: d.colors.back_border_color,
-	        borderWidth: d.borders.back_border_width,
-	        borderRadius: d.borders.back_border_radius,
-	        boxShadow: d.shadows.back_shadow + ' ' + d.colors.back_shadow_color,
-	        textShadow: d.shadows.text_shadow + ' ' + d.colors.text_shadow_color
-	      },
-	      summoner: {
-	        lineHeight: customHeight,
-	        height: customHeight,
-	        color: d.colors.text_color
-	      },
-	      tier: {
-	        color: 'white',
-	        lineHeight: customHeight,
-	        height: customHeight
-	      },
-	      mastery_icon: {
-	        borderColor: d.colors.champ_border_color,
-	        borderWidth: d.borders.champ_border_width,
-	        borderRadius: d.borders.champ_border_radius
-	      }
-	    };
-	    _this.getStats = _this.getStats.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(Main, [{
-	    key: 'getStats',
-	    value: function getStats() {
-	      var _stats = JSON.parse(_simulated_stats2.default);
-	      var tiercolor = _lodash2.default.find(_tiers_colors2.default, function (elem) {
-	        return elem.tier === _stats.stats.tier;
-	      }).color;
-	      this.setState({
-	        visible: true,
-	        stats: _stats.stats,
-	        tier: {
-	          lineHeight: this.state.tier.lineHeight,
-	          height: this.state.tier.height,
-	          color: tiercolor
-	        }
-	      });
-	      /*
-	      console.log('Getting Stats...');
-	      fetch('http://test.lobobot.com/link/getStatsTest.php',{
-	        method: 'get'
-	      })
-	      .then((res) => res.json())
-	      .then((data) => {
-	        console.log(data);
-	        if(!data.error) {
-	          const tiercolor = (_.find(tierStyles, (elem) => elem.tier === data.stats.tier)).color;
-	          this.setState({
-	            visible: true,
-	            stats: data.stats,
-	            tier: {
-	              color: tiercolor
-	            }
-	          });
-	        } else {
-	          console.log('Error');
-	        }
-	      })
-	      .catch((error) => {
-	        console.log(error);
-	      })
-	      */
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.getStats();
-	      this.timer = setInterval(this.getStats, 30000);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      if (this.state.visible) {
-	        var percent = (this.state.stats.wins * 100 / (this.state.stats.wins + this.state.stats.losses)).toFixed(1);
-	        var tiercolor = _lodash2.default.find(_tiers_colors2.default, function (elem) {
-	          return elem.tier === _this2.state.stats.tier;
-	        }).color;
-	        return _react2.default.createElement(
-	          'div',
-	          { id: 'main', style: this.state.main, className: 'animated ' + this.state.load_animation },
-	          this.state.show_champion ? _react2.default.createElement(
-	            'div',
-	            { className: 'col-left' },
-	            _react2.default.createElement(_ChampSlider2.default, { images: this.state.stats.champs, iconstyle: this.state.mastery_icon })
-	          ) : null,
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-center' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'summoner-container', style: { textAlign: this.state.align } },
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'row', id: 'summoner-name', style: this.state.summoner },
-	                this.state.stats.name
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'row', id: 'summoner-tier', style: this.state.tier },
-	                this.state.stats.tier + ' ' + this.state.stats.division + ' ' + this.state.stats.points + 'LP'
-	              ),
-	              this.state.show_winrate ? _react2.default.createElement(
-	                'div',
-	                { className: 'row', id: 'summoner-winratio' },
-	                _react2.default.createElement(
-	                  'span',
-	                  { style: { color: percent < 50 ? 'red' : 'green' } },
-	                  percent,
-	                  '%'
-	                ),
-	                ' - ',
-	                _react2.default.createElement(
-	                  'span',
-	                  { style: { color: 'green' } },
-	                  this.state.stats.wins,
-	                  'W'
-	                ),
-	                ' / ',
-	                _react2.default.createElement(
-	                  'span',
-	                  { style: { color: 'red' } },
-	                  this.state.stats.losses,
-	                  'L'
-	                )
-	              ) : null
-	            )
-	          ),
-	          this.state.show_tier ? _react2.default.createElement(
-	            'div',
-	            { className: 'col-right' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'icon-container' },
-	              _react2.default.createElement('div', { id: 'tier-icon', style: { backgroundImage: 'url(../public/img/tiers/' + this.state.stats.tier + '.png)' } })
-	            )
-	          ) : null,
-	          _react2.default.createElement('div', { style: { position: 'absolute', left: '0px', top: '75px', fontSize: '12px', color: 'black', textShadow: '1px 1px 1px green' } })
-	        );
-	      } else {
-	        return _react2.default.createElement('i', { className: 'fa fa-spinner fa-pulse fa-3x fa-fw', style: { color: 'grey', margin: 20 } });
-	      }
-	    }
-	  }]);
-
-	  return Main;
-	}(_react2.default.Component);
-
-	Main.propTypes = {
-	  style: _react2.default.PropTypes.object.isRequired
-	};
-
-	exports.default = Main;
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
 	 * @license
 	 * lodash 4.11.2 (Custom Build) <https://lodash.com/>
@@ -36542,10 +36322,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(170)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(169)(module), (function() { return this; }())))
 
 /***/ },
-/* 170 */
+/* 169 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -36559,6 +36339,227 @@
 		return module;
 	}
 
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _lodash = __webpack_require__(168);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _ChampSlider = __webpack_require__(171);
+
+	var _ChampSlider2 = _interopRequireDefault(_ChampSlider);
+
+	var _simulated_stats = __webpack_require__(172);
+
+	var _simulated_stats2 = _interopRequireDefault(_simulated_stats);
+
+	var _tiers_colors = __webpack_require__(173);
+
+	var _tiers_colors2 = _interopRequireDefault(_tiers_colors);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Main = function (_React$Component) {
+	  _inherits(Main, _React$Component);
+
+	  function Main(props) {
+	    _classCallCheck(this, Main);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
+
+	    var d = _this.props.style.data;
+	    var customHeight = d.show_winrate || !d.show_champion && !d.show_tier ? '20px' : '30px';
+	    _this.state = {
+	      visible: false,
+
+	      token: _this.props.style.token,
+	      load_animation: d.load_animation,
+	      show_champion: d.show_champion,
+	      show_winrate: d.show_winrate,
+	      show_tier: d.show_tier,
+	      align: d.align,
+	      main: {
+	        backgroundColor: d.colors.back_color,
+	        borderColor: d.colors.back_border_color,
+	        borderWidth: d.borders.back_border_width,
+	        borderRadius: d.borders.back_border_radius,
+	        boxShadow: d.shadows.back_shadow + ' ' + d.colors.back_shadow_color,
+	        textShadow: d.shadows.text_shadow + ' ' + d.colors.text_shadow_color
+	      },
+	      summoner: {
+	        lineHeight: customHeight,
+	        height: customHeight,
+	        color: d.colors.text_color
+	      },
+	      tier: {
+	        color: 'white',
+	        lineHeight: customHeight,
+	        height: customHeight
+	      },
+	      mastery_icon: {
+	        borderColor: d.colors.champ_border_color,
+	        borderWidth: d.borders.champ_border_width,
+	        borderRadius: d.borders.champ_border_radius
+	      }
+	    };
+	    _this.getStats = _this.getStats.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Main, [{
+	    key: 'getStats',
+	    value: function getStats() {
+	      var _stats = JSON.parse(_simulated_stats2.default);
+	      var tiercolor = _lodash2.default.find(_tiers_colors2.default, function (elem) {
+	        return elem.tier === _stats.stats.tier;
+	      }).color;
+	      this.setState({
+	        visible: true,
+	        stats: _stats.stats,
+	        tier: {
+	          lineHeight: this.state.tier.lineHeight,
+	          height: this.state.tier.height,
+	          color: tiercolor
+	        }
+	      });
+	      /*
+	      console.log('Getting Stats...');
+	      fetch('http://test.lobobot.com/link/getStatsTest.php',{
+	        method: 'get'
+	      })
+	      .then((res) => res.json())
+	      .then((data) => {
+	        console.log(data);
+	        if(!data.error) {
+	          const tiercolor = (_.find(tierStyles, (elem) => elem.tier === data.stats.tier)).color;
+	          this.setState({
+	            visible: true,
+	            stats: data.stats,
+	            tier: {
+	              color: tiercolor
+	            }
+	          });
+	        } else {
+	          console.log('Error');
+	        }
+	      })
+	      .catch((error) => {
+	        console.log(error);
+	      })
+	      */
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getStats();
+	      this.timer = setInterval(this.getStats, 30000);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      if (this.state.visible) {
+	        var percent = (this.state.stats.wins * 100 / (this.state.stats.wins + this.state.stats.losses)).toFixed(1);
+	        var tiercolor = _lodash2.default.find(_tiers_colors2.default, function (elem) {
+	          return elem.tier === _this2.state.stats.tier;
+	        }).color;
+	        return _react2.default.createElement(
+	          'div',
+	          { id: 'main', style: this.state.main, className: 'animated ' + this.state.load_animation },
+	          this.state.show_champion ? _react2.default.createElement(
+	            'div',
+	            { className: 'col-left' },
+	            _react2.default.createElement(_ChampSlider2.default, { images: this.state.stats.champs, iconstyle: this.state.mastery_icon })
+	          ) : null,
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-center' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'summoner-container', style: { textAlign: this.state.align } },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'row', id: 'summoner-name', style: this.state.summoner },
+	                this.state.stats.name
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'row', id: 'summoner-tier', style: this.state.tier },
+	                this.state.stats.tier + ' ' + this.state.stats.division + ' ' + this.state.stats.points + 'LP'
+	              ),
+	              this.state.show_winrate ? _react2.default.createElement(
+	                'div',
+	                { className: 'row', id: 'summoner-winratio' },
+	                _react2.default.createElement(
+	                  'span',
+	                  { style: { color: percent < 50 ? 'red' : 'green' } },
+	                  percent,
+	                  '%'
+	                ),
+	                ' - ',
+	                _react2.default.createElement(
+	                  'span',
+	                  { style: { color: 'green' } },
+	                  this.state.stats.wins,
+	                  'W'
+	                ),
+	                ' / ',
+	                _react2.default.createElement(
+	                  'span',
+	                  { style: { color: 'red' } },
+	                  this.state.stats.losses,
+	                  'L'
+	                )
+	              ) : null
+	            )
+	          ),
+	          this.state.show_tier ? _react2.default.createElement(
+	            'div',
+	            { className: 'col-right' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'icon-container' },
+	              _react2.default.createElement('div', { id: 'tier-icon', style: { backgroundImage: 'url(./img/tiers/' + this.state.stats.tier + '.png)' } })
+	            )
+	          ) : null,
+	          _react2.default.createElement('div', { style: { position: 'absolute', left: '0px', top: '75px', fontSize: '12px', color: 'black', textShadow: '1px 1px 1px green' } })
+	        );
+	      } else {
+	        return _react2.default.createElement('i', { className: 'fa fa-spinner fa-pulse fa-3x fa-fw', style: { color: 'grey', margin: 20 } });
+	      }
+	    }
+	  }]);
+
+	  return Main;
+	}(_react2.default.Component);
+
+	Main.propTypes = {
+	  style: _react2.default.PropTypes.object.isRequired
+	};
+
+	exports.default = Main;
 
 /***/ },
 /* 171 */
@@ -36576,7 +36577,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _lodash = __webpack_require__(169);
+	var _lodash = __webpack_require__(168);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -36625,7 +36626,7 @@
 	    key: 'render',
 	    value: function render() {
 	      var style = this.props.iconstyle;
-	      style.backgroundImage = 'url(../public/img/tiers/' + this.state.images[this.state.active].img + '.png)';
+	      style.backgroundImage = 'url(./img/tiers/' + this.state.images[this.state.active].img + '.png)';
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'mastery-icon', style: style },
