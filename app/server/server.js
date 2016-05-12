@@ -16,7 +16,7 @@ app.get('/stats', function (req, res) {
   res.json(simulated_stats);
 })
 
-var server = app.listen(3000, function () {
+var server = app.listen(2000, function () {
   var port = server.address().port;
   console.log("Server listening at http://localhost:%s", port);
 })
