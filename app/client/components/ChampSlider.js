@@ -34,7 +34,8 @@ class ChampSlider extends React.Component {
   }
 
   render() {
-    let style = this.props.iconstyle;
+    let style;
+    Object.assign(style, this.props.iconstyle);
     style.backgroundImage = `url(${ this.getChampionUrl(this.state.champs[this.state.active].champion_id) })`;
     return (
       <div className='mastery-icon' style={ style }>

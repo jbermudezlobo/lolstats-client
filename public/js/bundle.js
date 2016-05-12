@@ -20185,7 +20185,7 @@
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _ChampSlider = __webpack_require__(171);
+	var _ChampSlider = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./ChampSlider\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _ChampSlider2 = _interopRequireDefault(_ChampSlider);
 
@@ -36643,118 +36643,8 @@
 
 
 /***/ },
-/* 171 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _lodash = __webpack_require__(169);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _champions = __webpack_require__(172);
-
-	var _champions2 = _interopRequireDefault(_champions);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ChampSlider = function (_React$Component) {
-	  _inherits(ChampSlider, _React$Component);
-
-	  function ChampSlider(props) {
-	    _classCallCheck(this, ChampSlider);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ChampSlider).call(this, props));
-
-	    _this.state = {
-	      active: 0,
-	      champs: _this.props.images
-	    };
-	    _this.changeImage = _this.changeImage.bind(_this);
-	    _this.getChampionUrl = _this.getChampionUrl.bind(_this);
-	    _this.timer = setInterval(_this.changeImage, 4000);
-	    return _this;
-	  }
-
-	  _createClass(ChampSlider, [{
-	    key: 'changeImage',
-	    value: function changeImage() {
-	      var curr = this.state.active;
-	      if (curr + 1 >= this.state.champs.length) {
-	        curr = 0;
-	      } else {
-	        curr++;
-	      }
-	      this.setState({ active: curr });
-	    }
-	  }, {
-	    key: 'getChampionUrl',
-	    value: function getChampionUrl(id) {
-	      var champ = _lodash2.default.find(_champions2.default.data, function (element) {
-	        return element.id === id;
-	      });
-	      return 'http://ddragon.leagueoflegends.com/cdn/6.9.1/img/champion/' + champ.key + '.png';
-	    }
-	  }, {
-	    key: 'fPoints',
-	    value: function fPoints(e) {
-	      return e >= 1e6 ? (e / 1e6).toFixed(1).replace(/\.0$/, "") + "M" : e >= 1e3 ? (e / 1e3).toFixed(1).replace(/\.0$/, "") + "K" : e;
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var style = this.props.iconstyle;
-	      style.backgroundImage = 'url(' + this.getChampionUrl(this.state.champs[this.state.active].champion_id) + ')';
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'mastery-icon', style: style },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'mastery-text' },
-	          '#' + (this.state.active + 1) + ' ' + this.fPoints(this.state.champs[this.state.active].points)
-	        )
-	      );
-	    }
-	  }]);
-
-	  return ChampSlider;
-	}(_react2.default.Component);
-
-	ChampSlider.propTypes = {
-	  images: _react2.default.PropTypes.array.isRequired,
-	  iconstyle: _react2.default.PropTypes.object.isRequired
-	};
-
-	exports.default = ChampSlider;
-
-/***/ },
-/* 172 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.default = JSON.parse("{\n\t\"type\": \"champion\",\n\t\"version\": \"6.9.1\",\n\t\"data\": {\n\t\t\"Thresh\": {\n\t\t\t\"id\": 412,\n\t\t\t\"key\": \"Thresh\",\n\t\t\t\"name\": \"Thresh\",\n\t\t\t\"title\": \"the Chain Warden\"\n\t\t},\n\t\t\"Aatrox\": {\n\t\t\t\"id\": 266,\n\t\t\t\"key\": \"Aatrox\",\n\t\t\t\"name\": \"Aatrox\",\n\t\t\t\"title\": \"the Darkin Blade\"\n\t\t},\n\t\t\"Tryndamere\": {\n\t\t\t\"id\": 23,\n\t\t\t\"key\": \"Tryndamere\",\n\t\t\t\"name\": \"Tryndamere\",\n\t\t\t\"title\": \"the Barbarian King\"\n\t\t},\n\t\t\"Gragas\": {\n\t\t\t\"id\": 79,\n\t\t\t\"key\": \"Gragas\",\n\t\t\t\"name\": \"Gragas\",\n\t\t\t\"title\": \"the Rabble Rouser\"\n\t\t},\n\t\t\"Cassiopeia\": {\n\t\t\t\"id\": 69,\n\t\t\t\"key\": \"Cassiopeia\",\n\t\t\t\"name\": \"Cassiopeia\",\n\t\t\t\"title\": \"the Serpent's Embrace\"\n\t\t},\n\t\t\"AurelionSol\": {\n\t\t\t\"id\": 136,\n\t\t\t\"key\": \"AurelionSol\",\n\t\t\t\"name\": \"Aurelion Sol\",\n\t\t\t\"title\": \"The Star Forger\"\n\t\t},\n\t\t\"Ryze\": {\n\t\t\t\"id\": 13,\n\t\t\t\"key\": \"Ryze\",\n\t\t\t\"name\": \"Ryze\",\n\t\t\t\"title\": \"the Rogue Mage\"\n\t\t},\n\t\t\"Poppy\": {\n\t\t\t\"id\": 78,\n\t\t\t\"key\": \"Poppy\",\n\t\t\t\"name\": \"Poppy\",\n\t\t\t\"title\": \"Keeper of the Hammer\"\n\t\t},\n\t\t\"Sion\": {\n\t\t\t\"id\": 14,\n\t\t\t\"key\": \"Sion\",\n\t\t\t\"name\": \"Sion\",\n\t\t\t\"title\": \"The Undead Juggernaut\"\n\t\t},\n\t\t\"Jhin\": {\n\t\t\t\"id\": 202,\n\t\t\t\"key\": \"Jhin\",\n\t\t\t\"name\": \"Jhin\",\n\t\t\t\"title\": \"the Virtuoso\"\n\t\t},\n\t\t\"Annie\": {\n\t\t\t\"id\": 1,\n\t\t\t\"key\": \"Annie\",\n\t\t\t\"name\": \"Annie\",\n\t\t\t\"title\": \"the Dark Child\"\n\t\t},\n\t\t\"Nautilus\": {\n\t\t\t\"id\": 111,\n\t\t\t\"key\": \"Nautilus\",\n\t\t\t\"name\": \"Nautilus\",\n\t\t\t\"title\": \"the Titan of the Depths\"\n\t\t},\n\t\t\"Karma\": {\n\t\t\t\"id\": 43,\n\t\t\t\"key\": \"Karma\",\n\t\t\t\"name\": \"Karma\",\n\t\t\t\"title\": \"the Enlightened One\"\n\t\t},\n\t\t\"Lux\": {\n\t\t\t\"id\": 99,\n\t\t\t\"key\": \"Lux\",\n\t\t\t\"name\": \"Lux\",\n\t\t\t\"title\": \"the Lady of Luminosity\"\n\t\t},\n\t\t\"Ahri\": {\n\t\t\t\"id\": 103,\n\t\t\t\"key\": \"Ahri\",\n\t\t\t\"name\": \"Ahri\",\n\t\t\t\"title\": \"the Nine-Tailed Fox\"\n\t\t},\n\t\t\"Olaf\": {\n\t\t\t\"id\": 2,\n\t\t\t\"key\": \"Olaf\",\n\t\t\t\"name\": \"Olaf\",\n\t\t\t\"title\": \"the Berserker\"\n\t\t},\n\t\t\"Viktor\": {\n\t\t\t\"id\": 112,\n\t\t\t\"key\": \"Viktor\",\n\t\t\t\"name\": \"Viktor\",\n\t\t\t\"title\": \"the Machine Herald\"\n\t\t},\n\t\t\"Singed\": {\n\t\t\t\"id\": 27,\n\t\t\t\"key\": \"Singed\",\n\t\t\t\"name\": \"Singed\",\n\t\t\t\"title\": \"the Mad Chemist\"\n\t\t},\n\t\t\"Garen\": {\n\t\t\t\"id\": 86,\n\t\t\t\"key\": \"Garen\",\n\t\t\t\"name\": \"Garen\",\n\t\t\t\"title\": \"The Might of Demacia\"\n\t\t},\n\t\t\"Anivia\": {\n\t\t\t\"id\": 34,\n\t\t\t\"key\": \"Anivia\",\n\t\t\t\"name\": \"Anivia\",\n\t\t\t\"title\": \"the Cryophoenix\"\n\t\t},\n\t\t\"Maokai\": {\n\t\t\t\"id\": 57,\n\t\t\t\"key\": \"Maokai\",\n\t\t\t\"name\": \"Maokai\",\n\t\t\t\"title\": \"the Twisted Treant\"\n\t\t},\n\t\t\"Lissandra\": {\n\t\t\t\"id\": 127,\n\t\t\t\"key\": \"Lissandra\",\n\t\t\t\"name\": \"Lissandra\",\n\t\t\t\"title\": \"the Ice Witch\"\n\t\t},\n\t\t\"Morgana\": {\n\t\t\t\"id\": 25,\n\t\t\t\"key\": \"Morgana\",\n\t\t\t\"name\": \"Morgana\",\n\t\t\t\"title\": \"Fallen Angel\"\n\t\t},\n\t\t\"Fizz\": {\n\t\t\t\"id\": 105,\n\t\t\t\"key\": \"Fizz\",\n\t\t\t\"name\": \"Fizz\",\n\t\t\t\"title\": \"the Tidal Trickster\"\n\t\t},\n\t\t\"Evelynn\": {\n\t\t\t\"id\": 28,\n\t\t\t\"key\": \"Evelynn\",\n\t\t\t\"name\": \"Evelynn\",\n\t\t\t\"title\": \"the Widowmaker\"\n\t\t},\n\t\t\"Zed\": {\n\t\t\t\"id\": 238,\n\t\t\t\"key\": \"Zed\",\n\t\t\t\"name\": \"Zed\",\n\t\t\t\"title\": \"the Master of Shadows\"\n\t\t},\n\t\t\"Heimerdinger\": {\n\t\t\t\"id\": 74,\n\t\t\t\"key\": \"Heimerdinger\",\n\t\t\t\"name\": \"Heimerdinger\",\n\t\t\t\"title\": \"the Revered Inventor\"\n\t\t},\n\t\t\"Rumble\": {\n\t\t\t\"id\": 68,\n\t\t\t\"key\": \"Rumble\",\n\t\t\t\"name\": \"Rumble\",\n\t\t\t\"title\": \"the Mechanized Menace\"\n\t\t},\n\t\t\"Sona\": {\n\t\t\t\"id\": 37,\n\t\t\t\"key\": \"Sona\",\n\t\t\t\"name\": \"Sona\",\n\t\t\t\"title\": \"Maven of the Strings\"\n\t\t},\n\t\t\"Mordekaiser\": {\n\t\t\t\"id\": 82,\n\t\t\t\"key\": \"Mordekaiser\",\n\t\t\t\"name\": \"Mordekaiser\",\n\t\t\t\"title\": \"the Iron Revenant\"\n\t\t},\n\t\t\"KogMaw\": {\n\t\t\t\"id\": 96,\n\t\t\t\"key\": \"KogMaw\",\n\t\t\t\"name\": \"Kog'Maw\",\n\t\t\t\"title\": \"the Mouth of the Abyss\"\n\t\t},\n\t\t\"Katarina\": {\n\t\t\t\"id\": 55,\n\t\t\t\"key\": \"Katarina\",\n\t\t\t\"name\": \"Katarina\",\n\t\t\t\"title\": \"the Sinister Blade\"\n\t\t},\n\t\t\"Lulu\": {\n\t\t\t\"id\": 117,\n\t\t\t\"key\": \"Lulu\",\n\t\t\t\"name\": \"Lulu\",\n\t\t\t\"title\": \"the Fae Sorceress\"\n\t\t},\n\t\t\"Ashe\": {\n\t\t\t\"id\": 22,\n\t\t\t\"key\": \"Ashe\",\n\t\t\t\"name\": \"Ashe\",\n\t\t\t\"title\": \"the Frost Archer\"\n\t\t},\n\t\t\"Karthus\": {\n\t\t\t\"id\": 30,\n\t\t\t\"key\": \"Karthus\",\n\t\t\t\"name\": \"Karthus\",\n\t\t\t\"title\": \"the Deathsinger\"\n\t\t},\n\t\t\"Alistar\": {\n\t\t\t\"id\": 12,\n\t\t\t\"key\": \"Alistar\",\n\t\t\t\"name\": \"Alistar\",\n\t\t\t\"title\": \"the Minotaur\"\n\t\t},\n\t\t\"Darius\": {\n\t\t\t\"id\": 122,\n\t\t\t\"key\": \"Darius\",\n\t\t\t\"name\": \"Darius\",\n\t\t\t\"title\": \"the Hand of Noxus\"\n\t\t},\n\t\t\"Vayne\": {\n\t\t\t\"id\": 67,\n\t\t\t\"key\": \"Vayne\",\n\t\t\t\"name\": \"Vayne\",\n\t\t\t\"title\": \"the Night Hunter\"\n\t\t},\n\t\t\"Varus\": {\n\t\t\t\"id\": 110,\n\t\t\t\"key\": \"Varus\",\n\t\t\t\"name\": \"Varus\",\n\t\t\t\"title\": \"the Arrow of Retribution\"\n\t\t},\n\t\t\"Udyr\": {\n\t\t\t\"id\": 77,\n\t\t\t\"key\": \"Udyr\",\n\t\t\t\"name\": \"Udyr\",\n\t\t\t\"title\": \"the Spirit Walker\"\n\t\t},\n\t\t\"Leona\": {\n\t\t\t\"id\": 89,\n\t\t\t\"key\": \"Leona\",\n\t\t\t\"name\": \"Leona\",\n\t\t\t\"title\": \"the Radiant Dawn\"\n\t\t},\n\t\t\"Jayce\": {\n\t\t\t\"id\": 126,\n\t\t\t\"key\": \"Jayce\",\n\t\t\t\"name\": \"Jayce\",\n\t\t\t\"title\": \"the Defender of Tomorrow\"\n\t\t},\n\t\t\"Syndra\": {\n\t\t\t\"id\": 134,\n\t\t\t\"key\": \"Syndra\",\n\t\t\t\"name\": \"Syndra\",\n\t\t\t\"title\": \"the Dark Sovereign\"\n\t\t},\n\t\t\"Pantheon\": {\n\t\t\t\"id\": 80,\n\t\t\t\"key\": \"Pantheon\",\n\t\t\t\"name\": \"Pantheon\",\n\t\t\t\"title\": \"the Artisan of War\"\n\t\t},\n\t\t\"Riven\": {\n\t\t\t\"id\": 92,\n\t\t\t\"key\": \"Riven\",\n\t\t\t\"name\": \"Riven\",\n\t\t\t\"title\": \"the Exile\"\n\t\t},\n\t\t\"Khazix\": {\n\t\t\t\"id\": 121,\n\t\t\t\"key\": \"Khazix\",\n\t\t\t\"name\": \"Kha'Zix\",\n\t\t\t\"title\": \"the Voidreaver\"\n\t\t},\n\t\t\"Corki\": {\n\t\t\t\"id\": 42,\n\t\t\t\"key\": \"Corki\",\n\t\t\t\"name\": \"Corki\",\n\t\t\t\"title\": \"the Daring Bombardier\"\n\t\t},\n\t\t\"Caitlyn\": {\n\t\t\t\"id\": 51,\n\t\t\t\"key\": \"Caitlyn\",\n\t\t\t\"name\": \"Caitlyn\",\n\t\t\t\"title\": \"the Sheriff of Piltover\"\n\t\t},\n\t\t\"Azir\": {\n\t\t\t\"id\": 268,\n\t\t\t\"key\": \"Azir\",\n\t\t\t\"name\": \"Azir\",\n\t\t\t\"title\": \"the Emperor of the Sands\"\n\t\t},\n\t\t\"Nidalee\": {\n\t\t\t\"id\": 76,\n\t\t\t\"key\": \"Nidalee\",\n\t\t\t\"name\": \"Nidalee\",\n\t\t\t\"title\": \"the Bestial Huntress\"\n\t\t},\n\t\t\"Kennen\": {\n\t\t\t\"id\": 85,\n\t\t\t\"key\": \"Kennen\",\n\t\t\t\"name\": \"Kennen\",\n\t\t\t\"title\": \"the Heart of the Tempest\"\n\t\t},\n\t\t\"Galio\": {\n\t\t\t\"id\": 3,\n\t\t\t\"key\": \"Galio\",\n\t\t\t\"name\": \"Galio\",\n\t\t\t\"title\": \"the Sentinel's Sorrow\"\n\t\t},\n\t\t\"Veigar\": {\n\t\t\t\"id\": 45,\n\t\t\t\"key\": \"Veigar\",\n\t\t\t\"name\": \"Veigar\",\n\t\t\t\"title\": \"the Tiny Master of Evil\"\n\t\t},\n\t\t\"Bard\": {\n\t\t\t\"id\": 432,\n\t\t\t\"key\": \"Bard\",\n\t\t\t\"name\": \"Bard\",\n\t\t\t\"title\": \"the Wandering Caretaker\"\n\t\t},\n\t\t\"Gnar\": {\n\t\t\t\"id\": 150,\n\t\t\t\"key\": \"Gnar\",\n\t\t\t\"name\": \"Gnar\",\n\t\t\t\"title\": \"the Missing Link\"\n\t\t},\n\t\t\"Malzahar\": {\n\t\t\t\"id\": 90,\n\t\t\t\"key\": \"Malzahar\",\n\t\t\t\"name\": \"Malzahar\",\n\t\t\t\"title\": \"the Prophet of the Void\"\n\t\t},\n\t\t\"Graves\": {\n\t\t\t\"id\": 104,\n\t\t\t\"key\": \"Graves\",\n\t\t\t\"name\": \"Graves\",\n\t\t\t\"title\": \"the Outlaw\"\n\t\t},\n\t\t\"Vi\": {\n\t\t\t\"id\": 254,\n\t\t\t\"key\": \"Vi\",\n\t\t\t\"name\": \"Vi\",\n\t\t\t\"title\": \"the Piltover Enforcer\"\n\t\t},\n\t\t\"Kayle\": {\n\t\t\t\"id\": 10,\n\t\t\t\"key\": \"Kayle\",\n\t\t\t\"name\": \"Kayle\",\n\t\t\t\"title\": \"The Judicator\"\n\t\t},\n\t\t\"Irelia\": {\n\t\t\t\"id\": 39,\n\t\t\t\"key\": \"Irelia\",\n\t\t\t\"name\": \"Irelia\",\n\t\t\t\"title\": \"the Will of the Blades\"\n\t\t},\n\t\t\"LeeSin\": {\n\t\t\t\"id\": 64,\n\t\t\t\"key\": \"LeeSin\",\n\t\t\t\"name\": \"Lee Sin\",\n\t\t\t\"title\": \"the Blind Monk\"\n\t\t},\n\t\t\"Illaoi\": {\n\t\t\t\"id\": 420,\n\t\t\t\"key\": \"Illaoi\",\n\t\t\t\"name\": \"Illaoi\",\n\t\t\t\"title\": \"the Kraken Priestess\"\n\t\t},\n\t\t\"Elise\": {\n\t\t\t\"id\": 60,\n\t\t\t\"key\": \"Elise\",\n\t\t\t\"name\": \"Elise\",\n\t\t\t\"title\": \"the Spider Queen\"\n\t\t},\n\t\t\"Volibear\": {\n\t\t\t\"id\": 106,\n\t\t\t\"key\": \"Volibear\",\n\t\t\t\"name\": \"Volibear\",\n\t\t\t\"title\": \"the Thunder's Roar\"\n\t\t},\n\t\t\"Nunu\": {\n\t\t\t\"id\": 20,\n\t\t\t\"key\": \"Nunu\",\n\t\t\t\"name\": \"Nunu\",\n\t\t\t\"title\": \"the Yeti Rider\"\n\t\t},\n\t\t\"TwistedFate\": {\n\t\t\t\"id\": 4,\n\t\t\t\"key\": \"TwistedFate\",\n\t\t\t\"name\": \"Twisted Fate\",\n\t\t\t\"title\": \"the Card Master\"\n\t\t},\n\t\t\"Jax\": {\n\t\t\t\"id\": 24,\n\t\t\t\"key\": \"Jax\",\n\t\t\t\"name\": \"Jax\",\n\t\t\t\"title\": \"Grandmaster at Arms\"\n\t\t},\n\t\t\"Shyvana\": {\n\t\t\t\"id\": 102,\n\t\t\t\"key\": \"Shyvana\",\n\t\t\t\"name\": \"Shyvana\",\n\t\t\t\"title\": \"the Half-Dragon\"\n\t\t},\n\t\t\"Kalista\": {\n\t\t\t\"id\": 429,\n\t\t\t\"key\": \"Kalista\",\n\t\t\t\"name\": \"Kalista\",\n\t\t\t\"title\": \"the Spear of Vengeance\"\n\t\t},\n\t\t\"DrMundo\": {\n\t\t\t\"id\": 36,\n\t\t\t\"key\": \"DrMundo\",\n\t\t\t\"name\": \"Dr. Mundo\",\n\t\t\t\"title\": \"the Madman of Zaun\"\n\t\t},\n\t\t\"TahmKench\": {\n\t\t\t\"id\": 223,\n\t\t\t\"key\": \"TahmKench\",\n\t\t\t\"name\": \"Tahm Kench\",\n\t\t\t\"title\": \"the River King\"\n\t\t},\n\t\t\"Diana\": {\n\t\t\t\"id\": 131,\n\t\t\t\"key\": \"Diana\",\n\t\t\t\"name\": \"Diana\",\n\t\t\t\"title\": \"Scorn of the Moon\"\n\t\t},\n\t\t\"Brand\": {\n\t\t\t\"id\": 63,\n\t\t\t\"key\": \"Brand\",\n\t\t\t\"name\": \"Brand\",\n\t\t\t\"title\": \"the Burning Vengeance\"\n\t\t},\n\t\t\"Sejuani\": {\n\t\t\t\"id\": 113,\n\t\t\t\"key\": \"Sejuani\",\n\t\t\t\"name\": \"Sejuani\",\n\t\t\t\"title\": \"the Winter's Wrath\"\n\t\t},\n\t\t\"Vladimir\": {\n\t\t\t\"id\": 8,\n\t\t\t\"key\": \"Vladimir\",\n\t\t\t\"name\": \"Vladimir\",\n\t\t\t\"title\": \"the Crimson Reaper\"\n\t\t},\n\t\t\"Zac\": {\n\t\t\t\"id\": 154,\n\t\t\t\"key\": \"Zac\",\n\t\t\t\"name\": \"Zac\",\n\t\t\t\"title\": \"the Secret Weapon\"\n\t\t},\n\t\t\"RekSai\": {\n\t\t\t\"id\": 421,\n\t\t\t\"key\": \"RekSai\",\n\t\t\t\"name\": \"Rek'Sai\",\n\t\t\t\"title\": \"the Void Burrower\"\n\t\t},\n\t\t\"Quinn\": {\n\t\t\t\"id\": 133,\n\t\t\t\"key\": \"Quinn\",\n\t\t\t\"name\": \"Quinn\",\n\t\t\t\"title\": \"Demacia's Wings\"\n\t\t},\n\t\t\"Akali\": {\n\t\t\t\"id\": 84,\n\t\t\t\"key\": \"Akali\",\n\t\t\t\"name\": \"Akali\",\n\t\t\t\"title\": \"the Fist of Shadow\"\n\t\t},\n\t\t\"Tristana\": {\n\t\t\t\"id\": 18,\n\t\t\t\"key\": \"Tristana\",\n\t\t\t\"name\": \"Tristana\",\n\t\t\t\"title\": \"the Yordle Gunner\"\n\t\t},\n\t\t\"Hecarim\": {\n\t\t\t\"id\": 120,\n\t\t\t\"key\": \"Hecarim\",\n\t\t\t\"name\": \"Hecarim\",\n\t\t\t\"title\": \"the Shadow of War\"\n\t\t},\n\t\t\"Sivir\": {\n\t\t\t\"id\": 15,\n\t\t\t\"key\": \"Sivir\",\n\t\t\t\"name\": \"Sivir\",\n\t\t\t\"title\": \"the Battle Mistress\"\n\t\t},\n\t\t\"Lucian\": {\n\t\t\t\"id\": 236,\n\t\t\t\"key\": \"Lucian\",\n\t\t\t\"name\": \"Lucian\",\n\t\t\t\"title\": \"the Purifier\"\n\t\t},\n\t\t\"Rengar\": {\n\t\t\t\"id\": 107,\n\t\t\t\"key\": \"Rengar\",\n\t\t\t\"name\": \"Rengar\",\n\t\t\t\"title\": \"the Pridestalker\"\n\t\t},\n\t\t\"Warwick\": {\n\t\t\t\"id\": 19,\n\t\t\t\"key\": \"Warwick\",\n\t\t\t\"name\": \"Warwick\",\n\t\t\t\"title\": \"the Blood Hunter\"\n\t\t},\n\t\t\"Skarner\": {\n\t\t\t\"id\": 72,\n\t\t\t\"key\": \"Skarner\",\n\t\t\t\"name\": \"Skarner\",\n\t\t\t\"title\": \"the Crystal Vanguard\"\n\t\t},\n\t\t\"Malphite\": {\n\t\t\t\"id\": 54,\n\t\t\t\"key\": \"Malphite\",\n\t\t\t\"name\": \"Malphite\",\n\t\t\t\"title\": \"Shard of the Monolith\"\n\t\t},\n\t\t\"Yasuo\": {\n\t\t\t\"id\": 157,\n\t\t\t\"key\": \"Yasuo\",\n\t\t\t\"name\": \"Yasuo\",\n\t\t\t\"title\": \"the Unforgiven\"\n\t\t},\n\t\t\"Xerath\": {\n\t\t\t\"id\": 101,\n\t\t\t\"key\": \"Xerath\",\n\t\t\t\"name\": \"Xerath\",\n\t\t\t\"title\": \"the Magus Ascendant\"\n\t\t},\n\t\t\"Teemo\": {\n\t\t\t\"id\": 17,\n\t\t\t\"key\": \"Teemo\",\n\t\t\t\"name\": \"Teemo\",\n\t\t\t\"title\": \"the Swift Scout\"\n\t\t},\n\t\t\"Renekton\": {\n\t\t\t\"id\": 58,\n\t\t\t\"key\": \"Renekton\",\n\t\t\t\"name\": \"Renekton\",\n\t\t\t\"title\": \"the Butcher of the Sands\"\n\t\t},\n\t\t\"Nasus\": {\n\t\t\t\"id\": 75,\n\t\t\t\"key\": \"Nasus\",\n\t\t\t\"name\": \"Nasus\",\n\t\t\t\"title\": \"the Curator of the Sands\"\n\t\t},\n\t\t\"Draven\": {\n\t\t\t\"id\": 119,\n\t\t\t\"key\": \"Draven\",\n\t\t\t\"name\": \"Draven\",\n\t\t\t\"title\": \"the Glorious Executioner\"\n\t\t},\n\t\t\"Shaco\": {\n\t\t\t\"id\": 35,\n\t\t\t\"key\": \"Shaco\",\n\t\t\t\"name\": \"Shaco\",\n\t\t\t\"title\": \"the Demon Jester\"\n\t\t},\n\t\t\"Swain\": {\n\t\t\t\"id\": 50,\n\t\t\t\"key\": \"Swain\",\n\t\t\t\"name\": \"Swain\",\n\t\t\t\"title\": \"the Master Tactician\"\n\t\t},\n\t\t\"Ziggs\": {\n\t\t\t\"id\": 115,\n\t\t\t\"key\": \"Ziggs\",\n\t\t\t\"name\": \"Ziggs\",\n\t\t\t\"title\": \"the Hexplosives Expert\"\n\t\t},\n\t\t\"Talon\": {\n\t\t\t\"id\": 91,\n\t\t\t\"key\": \"Talon\",\n\t\t\t\"name\": \"Talon\",\n\t\t\t\"title\": \"the Blade's Shadow\"\n\t\t},\n\t\t\"Janna\": {\n\t\t\t\"id\": 40,\n\t\t\t\"key\": \"Janna\",\n\t\t\t\"name\": \"Janna\",\n\t\t\t\"title\": \"the Storm's Fury\"\n\t\t},\n\t\t\"Ekko\": {\n\t\t\t\"id\": 245,\n\t\t\t\"key\": \"Ekko\",\n\t\t\t\"name\": \"Ekko\",\n\t\t\t\"title\": \"the Boy Who Shattered Time\"\n\t\t},\n\t\t\"Orianna\": {\n\t\t\t\"id\": 61,\n\t\t\t\"key\": \"Orianna\",\n\t\t\t\"name\": \"Orianna\",\n\t\t\t\"title\": \"the Lady of Clockwork\"\n\t\t},\n\t\t\"Fiora\": {\n\t\t\t\"id\": 114,\n\t\t\t\"key\": \"Fiora\",\n\t\t\t\"name\": \"Fiora\",\n\t\t\t\"title\": \"the Grand Duelist\"\n\t\t},\n\t\t\"FiddleSticks\": {\n\t\t\t\"id\": 9,\n\t\t\t\"key\": \"FiddleSticks\",\n\t\t\t\"name\": \"Fiddlesticks\",\n\t\t\t\"title\": \"the Harbinger of Doom\"\n\t\t},\n\t\t\"Rammus\": {\n\t\t\t\"id\": 33,\n\t\t\t\"key\": \"Rammus\",\n\t\t\t\"name\": \"Rammus\",\n\t\t\t\"title\": \"the Armordillo\"\n\t\t},\n\t\t\"Chogath\": {\n\t\t\t\"id\": 31,\n\t\t\t\"key\": \"Chogath\",\n\t\t\t\"name\": \"Cho'Gath\",\n\t\t\t\"title\": \"the Terror of the Void\"\n\t\t},\n\t\t\"Leblanc\": {\n\t\t\t\"id\": 7,\n\t\t\t\"key\": \"Leblanc\",\n\t\t\t\"name\": \"LeBlanc\",\n\t\t\t\"title\": \"the Deceiver\"\n\t\t},\n\t\t\"Zilean\": {\n\t\t\t\"id\": 26,\n\t\t\t\"key\": \"Zilean\",\n\t\t\t\"name\": \"Zilean\",\n\t\t\t\"title\": \"the Chronokeeper\"\n\t\t},\n\t\t\"Soraka\": {\n\t\t\t\"id\": 16,\n\t\t\t\"key\": \"Soraka\",\n\t\t\t\"name\": \"Soraka\",\n\t\t\t\"title\": \"the Starchild\"\n\t\t},\n\t\t\"Nocturne\": {\n\t\t\t\"id\": 56,\n\t\t\t\"key\": \"Nocturne\",\n\t\t\t\"name\": \"Nocturne\",\n\t\t\t\"title\": \"the Eternal Nightmare\"\n\t\t},\n\t\t\"Jinx\": {\n\t\t\t\"id\": 222,\n\t\t\t\"key\": \"Jinx\",\n\t\t\t\"name\": \"Jinx\",\n\t\t\t\"title\": \"the Loose Cannon\"\n\t\t},\n\t\t\"Yorick\": {\n\t\t\t\"id\": 83,\n\t\t\t\"key\": \"Yorick\",\n\t\t\t\"name\": \"Yorick\",\n\t\t\t\"title\": \"the Gravedigger\"\n\t\t},\n\t\t\"Urgot\": {\n\t\t\t\"id\": 6,\n\t\t\t\"key\": \"Urgot\",\n\t\t\t\"name\": \"Urgot\",\n\t\t\t\"title\": \"the Headsman's Pride\"\n\t\t},\n\t\t\"Kindred\": {\n\t\t\t\"id\": 203,\n\t\t\t\"key\": \"Kindred\",\n\t\t\t\"name\": \"Kindred\",\n\t\t\t\"title\": \"The Eternal Hunters\"\n\t\t},\n\t\t\"MissFortune\": {\n\t\t\t\"id\": 21,\n\t\t\t\"key\": \"MissFortune\",\n\t\t\t\"name\": \"Miss Fortune\",\n\t\t\t\"title\": \"the Bounty Hunter\"\n\t\t},\n\t\t\"MonkeyKing\": {\n\t\t\t\"id\": 62,\n\t\t\t\"key\": \"MonkeyKing\",\n\t\t\t\"name\": \"Wukong\",\n\t\t\t\"title\": \"the Monkey King\"\n\t\t},\n\t\t\"Blitzcrank\": {\n\t\t\t\"id\": 53,\n\t\t\t\"key\": \"Blitzcrank\",\n\t\t\t\"name\": \"Blitzcrank\",\n\t\t\t\"title\": \"the Great Steam Golem\"\n\t\t},\n\t\t\"Shen\": {\n\t\t\t\"id\": 98,\n\t\t\t\"key\": \"Shen\",\n\t\t\t\"name\": \"Shen\",\n\t\t\t\"title\": \"the Eye of Twilight\"\n\t\t},\n\t\t\"Braum\": {\n\t\t\t\"id\": 201,\n\t\t\t\"key\": \"Braum\",\n\t\t\t\"name\": \"Braum\",\n\t\t\t\"title\": \"the Heart of the Freljord\"\n\t\t},\n\t\t\"XinZhao\": {\n\t\t\t\"id\": 5,\n\t\t\t\"key\": \"XinZhao\",\n\t\t\t\"name\": \"Xin Zhao\",\n\t\t\t\"title\": \"the Seneschal of Demacia\"\n\t\t},\n\t\t\"Twitch\": {\n\t\t\t\"id\": 29,\n\t\t\t\"key\": \"Twitch\",\n\t\t\t\"name\": \"Twitch\",\n\t\t\t\"title\": \"the Plague Rat\"\n\t\t},\n\t\t\"MasterYi\": {\n\t\t\t\"id\": 11,\n\t\t\t\"key\": \"MasterYi\",\n\t\t\t\"name\": \"Master Yi\",\n\t\t\t\"title\": \"the Wuju Bladesman\"\n\t\t},\n\t\t\"Taric\": {\n\t\t\t\"id\": 44,\n\t\t\t\"key\": \"Taric\",\n\t\t\t\"name\": \"Taric\",\n\t\t\t\"title\": \"the Shield of Valoran\"\n\t\t},\n\t\t\"Amumu\": {\n\t\t\t\"id\": 32,\n\t\t\t\"key\": \"Amumu\",\n\t\t\t\"name\": \"Amumu\",\n\t\t\t\"title\": \"the Sad Mummy\"\n\t\t},\n\t\t\"Gangplank\": {\n\t\t\t\"id\": 41,\n\t\t\t\"key\": \"Gangplank\",\n\t\t\t\"name\": \"Gangplank\",\n\t\t\t\"title\": \"the Saltwater Scourge\"\n\t\t},\n\t\t\"Trundle\": {\n\t\t\t\"id\": 48,\n\t\t\t\"key\": \"Trundle\",\n\t\t\t\"name\": \"Trundle\",\n\t\t\t\"title\": \"the Troll King\"\n\t\t},\n\t\t\"Kassadin\": {\n\t\t\t\"id\": 38,\n\t\t\t\"key\": \"Kassadin\",\n\t\t\t\"name\": \"Kassadin\",\n\t\t\t\"title\": \"the Void Walker\"\n\t\t},\n\t\t\"Velkoz\": {\n\t\t\t\"id\": 161,\n\t\t\t\"key\": \"Velkoz\",\n\t\t\t\"name\": \"Vel'Koz\",\n\t\t\t\"title\": \"the Eye of the Void\"\n\t\t},\n\t\t\"Zyra\": {\n\t\t\t\"id\": 143,\n\t\t\t\"key\": \"Zyra\",\n\t\t\t\"name\": \"Zyra\",\n\t\t\t\"title\": \"Rise of the Thorns\"\n\t\t},\n\t\t\"Nami\": {\n\t\t\t\"id\": 267,\n\t\t\t\"key\": \"Nami\",\n\t\t\t\"name\": \"Nami\",\n\t\t\t\"title\": \"the Tidecaller\"\n\t\t},\n\t\t\"JarvanIV\": {\n\t\t\t\"id\": 59,\n\t\t\t\"key\": \"JarvanIV\",\n\t\t\t\"name\": \"Jarvan IV\",\n\t\t\t\"title\": \"the Exemplar of Demacia\"\n\t\t},\n\t\t\"Ezreal\": {\n\t\t\t\"id\": 81,\n\t\t\t\"key\": \"Ezreal\",\n\t\t\t\"name\": \"Ezreal\",\n\t\t\t\"title\": \"the Prodigal Explorer\"\n\t\t}\n\t}\n}");
-
-/***/ },
+/* 171 */,
+/* 172 */,
 /* 173 */
 /***/ function(module, exports) {
 
