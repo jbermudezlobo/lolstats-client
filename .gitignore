@@ -42,5 +42,5 @@ ehthumbs.db
 Thumbs.db
 
 /node_modules/*
-bundle.js
-bundle.min.js
+*bundle.js
+*.min.js

@@ -20255,18 +20255,6 @@
 	    value: function getStats() {
 	      var _this2 = this;
 
-	      /*
-	      const _stats = JSON.parse(stats);
-	      const tiercolor = (_.find(tierStyles, (elem) => elem.tier === _stats.stats.tier)).color;
-	      this.setState({
-	        visible: true,
-	        stats: _stats.stats,
-	        tier: {
-	          lineHeight: this.state.tier.lineHeight,
-	          height: this.state.tier.height,
-	          color: tiercolor
-	        }
-	      });*/
 	      console.log('Getting Stats...');
 	      fetch('/stats', {
 	        method: 'GET',
