@@ -1,18 +1,20 @@
 import React from 'react';
 import _ from 'lodash';
 import ChampSlider from './ChampSlider';
-// import stats from './../utils/simulated_stats';
 import TierColors from './../utils/TierColors';
 
-class Main extends React.Component {
+const colors = {
+  lolblue: 'rgb(173, 170, 252)',
+  green: 'rgb(143, 230, 148)',
+  red: 'rgb(176, 58, 22)'
+}
+class Stats extends React.Component {
   static propTypes = {
     styleData: React.PropTypes.object.isRequired
   };
 
   constructor(props) {
     super(props);
-    this.getStats = this.getStats.bind(this);
-    this.rgbaToString = this.rgbaToString.bind(this);
     const d = this.props.styleData;
     const customHeight = d.show_winrate || (!d.show_champion && !d.show_tier) ? '20px' : '30px';
     this.state = {
@@ -43,11 +45,16 @@ class Main extends React.Component {
         height: customHeight,
       },
       mastery_icon: {
+        boxShadow: `${this.shadowToString(d.champ_shadow)} ${this.rgbaToString(d.champ_shadow_color)}`,
         borderColor: this.rgbaToString(d.champ_border_color),
         borderWidth: `${d.champ_border_width}px`,
         borderRadius: `${d.champ_border_radius}%`
-      }
+      },
+      stats: {}
     };
+    console.log('Initial State:', this.state);
+    this.getStats = this.getStats.bind(this);
+    this.rgbaToString = this.rgbaToString.bind(this);
   };
 
   getStats() {
@@ -60,18 +67,18 @@ class Main extends React.Component {
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
+      console.log('StatsData:', data);
       if(!data.error) {
-        const tiercolor = (_.find(TierColors, (elem) => elem.tier === data.stats.tier)).color;
         this.setState({
           visible: true,
           stats: data.stats,
           tier: {
             lineHeight: this.state.tier.lineHeight,
             height: this.state.tier.height,
-            color: tiercolor
+            color: (_.find(TierColors, (elem) => elem.tier === data.stats.tier)).color
           }
         });
+
       } else {
         console.log('Error');
       }
@@ -118,9 +125,9 @@ class Main extends React.Component {
                 this.state.show_winrate ?
                   (
                     <div className='row' id='summoner-winratio'>
-                      <span style={{ color: percent < 50 ? 'red' : '#39e600' }}>{percent}%</span>{' - '}
-                      <span style={{ color: '#39e600' }}>{this.state.stats.wins}W</span>{' / '}
-                      <span style={{ color: '#e60000' }}>{this.state.stats.losses}L</span>
+                      <span style={{ color: percent < 50 ? colors.red : colors.green }}>{percent}%</span>{' - '}
+                      <span style={{ color: colors.green }}>{this.state.stats.wins}W</span>{' / '}
+                      <span style={{ color: colors.red }}>{this.state.stats.losses}L</span>
                     </div>
                   ) : null
               }
@@ -139,7 +146,7 @@ class Main extends React.Component {
           {
             this.state.show_web ?
             (
-              <div style={{ position: 'absolute', left: '20px', top: '90px', fontSize: '13px', color: 'purple' }}>
+              <div style={{ position: 'absolute', left: '20px', top: '90px', fontSize: '13px', color: 'grey' }}>
                 {'http://www.lobobot.com'}
               </div>
             ) : null
@@ -150,4 +157,4 @@ class Main extends React.Component {
   };
 }
 
-export default Main;
+export default Stats;

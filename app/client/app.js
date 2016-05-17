@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Main from './components/Main';
+import Stats from './components/Stats';
 
 const config = {
   appTitle: 'Stats',
@@ -15,4 +15,4 @@ document.getElementsByTagName('title')[0] = config.appTitle;
 config.styleData = JSON.parse(document.getElementById(config.appDataContainer).innerHTML);
 document.getElementById(config.appDataContainer).innerHTML = "";
 
-ReactDOM.render(<Main styleData={config.styleData}/>, document.getElementById(config.appContainer));
+ReactDOM.render(<Stats styleData={config.styleData}/>, document.getElementById(config.appContainer));
