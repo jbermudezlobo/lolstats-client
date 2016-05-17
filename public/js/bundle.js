@@ -72,7 +72,7 @@
 	config.styleData = JSON.parse(document.getElementById(config.appDataContainer).innerHTML);
 	document.getElementById(config.appDataContainer).innerHTML = "";
 
-	_reactDom2.default.render(_react2.default.createElement(_Main2.default, { style: config.styleData }), document.getElementById(config.appContainer));
+	_reactDom2.default.render(_react2.default.createElement(_Main2.default, { styleData: config.styleData }), document.getElementById(config.appContainer));
 
 /***/ },
 /* 1 */
@@ -20211,11 +20211,13 @@
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
 
-	    var d = _this.props.style.data;
+	    _this.getStats = _this.getStats.bind(_this);
+	    _this.rgbaToString = _this.rgbaToString.bind(_this);
+	    var d = _this.props.styleData;
 	    var customHeight = d.show_winrate || !d.show_champion && !d.show_tier ? '20px' : '30px';
 	    _this.state = {
 	      visible: false,
-	      token: _this.props.style.token,
+	      token: d.token,
 	      load_animation: d.load_animation,
 	      show_champion: d.show_champion,
 	      show_winrate: d.show_winrate,
@@ -20223,17 +20225,17 @@
 	      show_web: d.show_web,
 	      align: d.align,
 	      main: {
-	        backgroundColor: d.colors.back_color,
-	        borderColor: d.colors.back_border_color,
-	        borderWidth: d.borders.back_border_width,
-	        borderRadius: d.borders.back_border_radius,
-	        boxShadow: d.shadows.back_shadow + ' ' + d.colors.back_shadow_color,
-	        textShadow: d.shadows.text_shadow + ' ' + d.colors.text_shadow_color
+	        backgroundColor: _this.rgbaToString(d.back_color),
+	        borderColor: _this.rgbaToString(d.back_border_color),
+	        borderWidth: d.back_border_width + 'px',
+	        borderRadius: d.back_border_radius + 'px',
+	        boxShadow: _this.shadowToString(d.back_shadow) + ' ' + _this.rgbaToString(d.back_shadow_color),
+	        textShadow: _this.shadowToString(d.text_shadow) + ' ' + _this.rgbaToString(d.text_shadow_color)
 	      },
 	      summoner: {
 	        lineHeight: customHeight,
 	        height: customHeight,
-	        color: d.colors.text_color
+	        color: _this.rgbaToString(d.text_color)
 	      },
 	      tier: {
 	        color: 'white',
@@ -20241,12 +20243,11 @@
 	        height: customHeight
 	      },
 	      mastery_icon: {
-	        borderColor: d.colors.champ_border_color,
-	        borderWidth: d.borders.champ_border_width,
-	        borderRadius: d.borders.champ_border_radius
+	        borderColor: _this.rgbaToString(d.champ_border_color),
+	        borderWidth: d.champ_border_width + 'px',
+	        borderRadius: d.champ_border_radius + '%'
 	      }
 	    };
-	    _this.getStats = _this.getStats.bind(_this);
 	    return _this;
 	  }
 
@@ -20255,18 +20256,6 @@
 	    value: function getStats() {
 	      var _this2 = this;
 
-	      /*
-	      const _stats = JSON.parse(stats);
-	      const tiercolor = (_.find(tierStyles, (elem) => elem.tier === _stats.stats.tier)).color;
-	      this.setState({
-	        visible: true,
-	        stats: _stats.stats,
-	        tier: {
-	          lineHeight: this.state.tier.lineHeight,
-	          height: this.state.tier.height,
-	          color: tiercolor
-	        }
-	      });*/
 	      console.log('Getting Stats...');
 	      fetch('/stats', {
 	        method: 'GET',
@@ -20302,6 +20291,16 @@
 	    value: function componentDidMount() {
 	      this.getStats();
 	      this.timer = setInterval(this.getStats, 30000);
+	    }
+	  }, {
+	    key: 'rgbaToString',
+	    value: function rgbaToString(color) {
+	      return 'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')';
+	    }
+	  }, {
+	    key: 'shadowToString',
+	    value: function shadowToString(shadow) {
+	      return shadow.h + 'px ' + shadow.v + 'px ' + shadow.b + 'px';
 	    }
 	  }, {
 	    key: 'render',
@@ -20370,7 +20369,7 @@
 	          ) : null,
 	          this.state.show_web ? _react2.default.createElement(
 	            'div',
-	            { style: { position: 'absolute', left: '0px', top: '75px', fontSize: '13px', color: this.state.summoner.color } },
+	            { style: { position: 'absolute', left: '20px', top: '90px', fontSize: '13px', color: 'purple' } },
 	            'http://www.lobobot.com'
 	          ) : null
 	        );
@@ -20384,9 +20383,8 @@
 	}(_react2.default.Component);
 
 	Main.propTypes = {
-	  style: _react2.default.PropTypes.object.isRequired
+	  styleData: _react2.default.PropTypes.object.isRequired
 	};
-
 	exports.default = Main;
 
 /***/ },

@@ -5,13 +5,19 @@ import ChampSlider from './ChampSlider';
 import TierColors from './../utils/TierColors';
 
 class Main extends React.Component {
+  static propTypes = {
+    styleData: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
-    const d = this.props.style.data;
+    this.getStats = this.getStats.bind(this);
+    this.rgbaToString = this.rgbaToString.bind(this);
+    const d = this.props.styleData;
     const customHeight = d.show_winrate || (!d.show_champion && !d.show_tier) ? '20px' : '30px';
     this.state = {
       visible: false,
-      token: this.props.style.token,
+      token: d.token,
       load_animation: d.load_animation,
       show_champion: d.show_champion,
       show_winrate: d.show_winrate,
@@ -19,17 +25,17 @@ class Main extends React.Component {
       show_web: d.show_web,
       align: d.align,
       main: {
-        backgroundColor: d.colors.back_color,
-        borderColor: d.colors.back_border_color,
-        borderWidth: d.borders.back_border_width,
-        borderRadius: d.borders.back_border_radius,
-        boxShadow: `${d.shadows.back_shadow} ${d.colors.back_shadow_color}`,
-        textShadow: `${d.shadows.text_shadow} ${d.colors.text_shadow_color}`,
+        backgroundColor: this.rgbaToString(d.back_color),
+        borderColor: this.rgbaToString(d.back_border_color),
+        borderWidth: `${d.back_border_width}px`,
+        borderRadius: `${d.back_border_radius}px`,
+        boxShadow: `${this.shadowToString(d.back_shadow)} ${this.rgbaToString(d.back_shadow_color)}`,
+        textShadow: `${this.shadowToString(d.text_shadow)} ${this.rgbaToString(d.text_shadow_color)}`
       },
       summoner: {
         lineHeight: customHeight,
         height: customHeight,
-        color: d.colors.text_color
+        color: this.rgbaToString(d.text_color)
       },
       tier: {
         color: 'white',
@@ -37,27 +43,14 @@ class Main extends React.Component {
         height: customHeight,
       },
       mastery_icon: {
-        borderColor: d.colors.champ_border_color,
-        borderWidth: d.borders.champ_border_width,
-        borderRadius: d.borders.champ_border_radius
+        borderColor: this.rgbaToString(d.champ_border_color),
+        borderWidth: `${d.champ_border_width}px`,
+        borderRadius: `${d.champ_border_radius}%`
       }
     };
-    this.getStats = this.getStats.bind(this);
   };
 
   getStats() {
-    /*
-    const _stats = JSON.parse(stats);
-    const tiercolor = (_.find(tierStyles, (elem) => elem.tier === _stats.stats.tier)).color;
-    this.setState({
-      visible: true,
-      stats: _stats.stats,
-      tier: {
-        lineHeight: this.state.tier.lineHeight,
-        height: this.state.tier.height,
-        color: tiercolor
-      }
-    });*/
     console.log('Getting Stats...');
     fetch('/stats',{
       method: 'GET',
@@ -91,6 +84,14 @@ class Main extends React.Component {
   componentDidMount() {
     this.getStats();
     this.timer = setInterval(this.getStats, 30000);
+  }
+
+  rgbaToString(color) {
+    return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
+  }
+
+  shadowToString(shadow) {
+    return `${shadow.h}px ${shadow.v}px ${shadow.b}px`;
   }
 
   render() {
@@ -138,7 +139,7 @@ class Main extends React.Component {
           {
             this.state.show_web ?
             (
-              <div style={{ position: 'absolute', left: '0px', top: '75px', fontSize: '13px', color: this.state.summoner.color }}>
+              <div style={{ position: 'absolute', left: '20px', top: '90px', fontSize: '13px', color: 'purple' }}>
                 {'http://www.lobobot.com'}
               </div>
             ) : null
@@ -148,9 +149,5 @@ class Main extends React.Component {
     } else { return <i className="fa fa-spinner fa-pulse fa-3x fa-fw" style={{ color: 'grey', margin: 20 }}></i>; }
   };
 }
-
-Main.propTypes = {
-  style: React.PropTypes.object.isRequired
-};
 
 export default Main;

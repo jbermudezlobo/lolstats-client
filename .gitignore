@@ -33,6 +33,7 @@
 
 # OS generated files #
 ######################
+/.tempnode/*
 .DS_Store
 .DS_Store?
 ._*

@@ -2,32 +2,24 @@
   "error": false,
   "token": "AA123BB456CC",
   "type": 0,
-  "data": {
-    "load_animation": "flipInY",
-    "show_champion": true,
-    "show_winrate": true,
-    "show_tier": true,
-    "show_web": false,
-    "align": "left",
-    "colors": {
-      "back_color": "rgba(0, 0, 0, 0.6)",
-      "text_color": "rgba(255, 255, 255, 1)",
-      "back_border_color": "rgba(0, 0, 0, 0.8)",
-      "champ_border_color": "rgba(0, 0, 0, 0.8)",
-      "back_shadow_color": "rgba(0, 0, 0, 0.1)",
-      "champ_shadow_color": "rgba(0, 0, 0, 0.1)",
-      "text_shadow_color": "rgba(0, 0, 0, 0.9)"
-    },
-    "borders": {
-      "back_border_width": "2px",
-      "back_border_radius": "5px",
-      "champ_border_width": "2px",
-      "champ_border_radius": "50%"
-    },
-    "shadows": {
-      "back_shadow": "0px 0px 10px",
-      "champ_shadow": "0px 0px 2px",
-      "text_shadow": "1px 1px 1px"
-    }
-  }
+  "load_animation": "none",
+  "show_champion": true,
+  "show_winrate": true,
+  "show_tier": true,
+  "show_web": true,
+  "align": "left",
+  "back_color": { "r": 0, "g": 100, "b": 0, "a": 1 },
+  "text_color": { "r": 255, "g": 255, "b": 255, "a": 1 },
+  "back_border_color": { "r": 0, "g": 0, "b": 0, "a": 1 },
+  "champ_border_color": { "r": 255, "g": 0, "b": 0, "a": 1 },
+  "back_shadow_color": { "r": 0, "g": 0, "b": 0, "a": 1 },
+  "champ_shadow_color": { "r": 0, "g": 0, "b": 0, "a": 1 },
+  "text_shadow_color": { "r": 0, "g": 0, "b": 0, "a": 1 },
+  "back_border_width": 2,
+  "back_border_radius": 10,
+  "champ_border_width": 1,
+  "champ_border_radius": 50,
+  "back_shadow": { "h": 1, "v": 1, "b": 0 },
+  "champ_shadow": { "h": 1, "v": 1, "b": 0 },
+  "text_shadow": { "h": 1, "v": 1, "b": 0 }
 }
