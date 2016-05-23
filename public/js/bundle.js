@@ -54,7 +54,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _Stats = __webpack_require__(174);
+	var _Stats = __webpack_require__(168);
 
 	var _Stats2 = _interopRequireDefault(_Stats);
 
@@ -20166,7 +20166,307 @@
 	module.exports = ReactMount.renderSubtreeIntoContainer;
 
 /***/ },
-/* 168 */,
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _lodash = __webpack_require__(169);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _superagent = __webpack_require__(171);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
+	var _ChampSlider = __webpack_require__(177);
+
+	var _ChampSlider2 = _interopRequireDefault(_ChampSlider);
+
+	var _TierColors = __webpack_require__(179);
+
+	var _TierColors2 = _interopRequireDefault(_TierColors);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var colors = {
+	  lolblue: 'rgb(173, 170, 252)',
+	  green: 'rgb(143, 230, 148)',
+	  red: 'rgb(176, 58, 22)'
+	};
+
+	var outCols = {
+	  position: 'relative',
+	  float: 'left',
+	  width: '70px',
+	  height: '70px',
+	  marginRight: '-15px !important'
+	};
+
+	var centerCol = {
+	  margin: '5px',
+	  float: 'left',
+	  minWidth: '100px',
+	  padding: '0px'
+	};
+
+	var Stats = function (_React$Component) {
+	  _inherits(Stats, _React$Component);
+
+	  function Stats(props) {
+	    _classCallCheck(this, Stats);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Stats).call(this, props));
+
+	    _this.state = {
+	      token: _this.props.styleData.token,
+	      visible: false,
+	      styleData: _this.props.styleData
+	    };
+	    _this.getStats = _this.getStats.bind(_this);
+	    _this.getStatsAjax = _this.getStatsAjax.bind(_this);
+	    _this.rgbaToString = _this.rgbaToString.bind(_this);
+	    _this.shadowToString = _this.shadowToString.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Stats, [{
+	    key: 'getStats',
+	    value: function getStats() {
+	      var _this2 = this;
+
+	      this.setState({ isLoading: true });
+	      console.log('Getting stats...', this.state.token);
+	      var formdata = new FormData();
+	      formdata.append('token', '' + this.state.token);
+	      var options = {
+	        method: 'POST',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: formdata
+	      };
+	      console.log(options);
+	      fetch('http://test.lobobot.com/actions/getstats.php', options).then(function (res) {
+	        return res.json();
+	      }).then(function (_data) {
+	        console.log('StatsData:', _data);
+	        if (!_data.error) {
+	          _this2.setState({
+	            visible: true,
+	            stats: _data.stats
+	          });
+	        } else {
+	          console.log('Error:', _data.error);
+	        }
+	      }).catch(function (err) {
+	        return console.log('Error:', err);
+	      });
+	    }
+	  }, {
+	    key: 'getStatsAjax',
+	    value: function getStatsAjax() {
+	      var _this3 = this;
+
+	      this.setState({ isLoading: true });
+	      console.log('Getting stats...');
+	      _superagent2.default.post('http://test.lobobot.com/actions/getstats.php').send('token=' + this.state.token).accept('json').end(function (err, res) {
+	        if (!err) {
+	          var _data = res.body;
+	          console.log('StatsData:', _data);
+	          if (!_data.error) {
+	            _this3.setState({
+	              visible: true,
+	              stats: _data.stats
+	            });
+	          } else {
+	            console.log('Error:', _data.error);
+	          }
+	        } else {
+	          console.log('Error:', err);
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getStatsAjax();
+	      if (this.state.token !== 'NOTOKEN') {
+	        this.timer = setInterval(this.getStatsAjax, 15000);
+	      }
+	    }
+	  }, {
+	    key: 'rgbaToString',
+	    value: function rgbaToString(color) {
+	      return 'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')';
+	    }
+	  }, {
+	    key: 'shadowToString',
+	    value: function shadowToString(shadow) {
+	      return shadow.h + 'px ' + shadow.v + 'px ' + shadow.b + 'px';
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this4 = this;
+
+	      if (this.state.visible) {
+
+	        var d = this.state.styleData;
+	        var customHeight = d.show_winrate || !d.show_champion && !d.show_tier ? '20px' : '30px';
+	        var cs = {
+	          main: {
+	            fontFamily: 'Montserrat',
+	            display: 'inline-block',
+	            border: 'solid',
+	            margin: '15px',
+	            backgroundColor: this.rgbaToString(d.back_color),
+	            borderColor: this.rgbaToString(d.back_border_color),
+	            borderWidth: d.back_border_width + 'px',
+	            borderRadius: d.back_border_radius + 'px',
+	            boxShadow: this.shadowToString(d.back_shadow) + ' ' + this.rgbaToString(d.back_shadow_color),
+	            textShadow: this.shadowToString(d.text_shadow) + ' ' + this.rgbaToString(d.text_shadow_color)
+	          },
+	          token: d.token,
+	          load_animation: d.load_animation,
+	          show_champion: d.show_champion,
+	          show_winrate: d.show_winrate,
+	          show_tier: d.show_tier,
+	          show_web: d.show_web,
+	          align: d.align,
+	          summoner: {
+	            lineHeight: customHeight,
+	            height: customHeight,
+	            color: this.rgbaToString(d.text_color)
+	          },
+	          tier: {
+	            color: _lodash2.default.find(_TierColors2.default, function (elem) {
+	              return elem.tier === _this4.state.stats.tier;
+	            }).color,
+	            lineHeight: customHeight,
+	            height: customHeight
+	          },
+	          mastery_icon: {
+	            boxShadow: this.shadowToString(d.champ_shadow) + ' ' + this.rgbaToString(d.champ_shadow_color),
+	            borderColor: this.rgbaToString(d.champ_border_color),
+	            borderWidth: d.champ_border_width + 'px',
+	            borderRadius: d.champ_border_radius + '%'
+	          }
+	        };
+
+	        var percent = (this.state.stats.wins * 100 / (this.state.stats.wins + this.state.stats.losses)).toFixed(1);
+	        var champSection = cs.show_champion ? _react2.default.createElement(
+	          'div',
+	          { style: outCols },
+	          _react2.default.createElement(_ChampSlider2.default, { images: this.state.stats.champs, iconstyle: cs.mastery_icon })
+	        ) : null;
+	        var tierSection = cs.show_tier ? _react2.default.createElement(
+	          'div',
+	          { style: outCols },
+	          ' ',
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'icon-container' },
+	            ' ',
+	            _react2.default.createElement('div', { id: 'tier-icon', style: { backgroundImage: 'url(./img/tiers/' + this.state.stats.tier + '.png)' } }),
+	            ' '
+	          ),
+	          ' '
+	        ) : null;
+	        var winrateSection = cs.show_winrate ? _react2.default.createElement(
+	          'div',
+	          { className: 'row', id: 'summoner-winratio' },
+	          ' ',
+	          _react2.default.createElement(
+	            'span',
+	            { style: { color: percent < 50 ? colors.red : colors.green } },
+	            percent,
+	            '%'
+	          ),
+	          ' - ',
+	          ' ',
+	          _react2.default.createElement(
+	            'span',
+	            { style: { color: colors.green } },
+	            this.state.stats.wins,
+	            'W'
+	          ),
+	          ' / ',
+	          ' ',
+	          _react2.default.createElement(
+	            'span',
+	            { style: { color: colors.red } },
+	            this.state.stats.losses,
+	            'L'
+	          ),
+	          ' '
+	        ) : null;
+
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'div',
+	            { id: 'main', style: cs.main, className: 'animated ' + cs.load_animation },
+	            champSection,
+	            _react2.default.createElement(
+	              'div',
+	              { style: centerCol },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'summoner-container', style: { textAlign: cs.align } },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'row', id: 'summoner-name', style: cs.summoner },
+	                  this.state.stats.name
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'row', id: 'summoner-tier', style: cs.tier },
+	                  this.state.stats.tier + ' ' + this.state.stats.division + ' ' + this.state.stats.points + 'LP'
+	                ),
+	                winrateSection
+	              )
+	            ),
+	            tierSection
+	          ),
+	          cs.show_web ? _react2.default.createElement(
+	            'div',
+	            { style: { position: 'absolute', left: '20px', top: '0px', fontSize: '12px', color: 'grey', fontFamily: 'Montserrat' } },
+	            'www.lobobot.com'
+	          ) : null
+	        );
+	      } else {
+	        return _react2.default.createElement('i', { className: 'fa fa-spinner fa-pulse fa-3x fa-fw', style: { color: 'grey', margin: 20 } });
+	      }
+	    }
+	  }]);
+
+	  return Stats;
+	}(_react2.default.Component);
+
+	Stats.propTypes = {
+	  styleData: _react2.default.PropTypes.object.isRequired
+	};
+	exports.default = Stats;
+
+/***/ },
 /* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -36435,6 +36735,1516 @@
 /* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/**
+	 * Module dependencies.
+	 */
+
+	var Emitter = __webpack_require__(172);
+	var reduce = __webpack_require__(173);
+	var requestBase = __webpack_require__(174);
+	var isObject = __webpack_require__(175);
+
+	/**
+	 * Root reference for iframes.
+	 */
+
+	var root;
+	if (typeof window !== 'undefined') { // Browser window
+	  root = window;
+	} else if (typeof self !== 'undefined') { // Web Worker
+	  root = self;
+	} else { // Other environments
+	  root = this;
+	}
+
+	/**
+	 * Noop.
+	 */
+
+	function noop(){};
+
+	/**
+	 * Check if `obj` is a host object,
+	 * we don't want to serialize these :)
+	 *
+	 * TODO: future proof, move to compoent land
+	 *
+	 * @param {Object} obj
+	 * @return {Boolean}
+	 * @api private
+	 */
+
+	function isHost(obj) {
+	  var str = {}.toString.call(obj);
+
+	  switch (str) {
+	    case '[object File]':
+	    case '[object Blob]':
+	    case '[object FormData]':
+	      return true;
+	    default:
+	      return false;
+	  }
+	}
+
+	/**
+	 * Expose `request`.
+	 */
+
+	var request = module.exports = __webpack_require__(176).bind(null, Request);
+
+	/**
+	 * Determine XHR.
+	 */
+
+	request.getXHR = function () {
+	  if (root.XMLHttpRequest
+	      && (!root.location || 'file:' != root.location.protocol
+	          || !root.ActiveXObject)) {
+	    return new XMLHttpRequest;
+	  } else {
+	    try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
+	    try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
+	    try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
+	    try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
+	  }
+	  return false;
+	};
+
+	/**
+	 * Removes leading and trailing whitespace, added to support IE.
+	 *
+	 * @param {String} s
+	 * @return {String}
+	 * @api private
+	 */
+
+	var trim = ''.trim
+	  ? function(s) { return s.trim(); }
+	  : function(s) { return s.replace(/(^\s*|\s*$)/g, ''); };
+
+	/**
+	 * Serialize the given `obj`.
+	 *
+	 * @param {Object} obj
+	 * @return {String}
+	 * @api private
+	 */
+
+	function serialize(obj) {
+	  if (!isObject(obj)) return obj;
+	  var pairs = [];
+	  for (var key in obj) {
+	    if (null != obj[key]) {
+	      pushEncodedKeyValuePair(pairs, key, obj[key]);
+	        }
+	      }
+	  return pairs.join('&');
+	}
+
+	/**
+	 * Helps 'serialize' with serializing arrays.
+	 * Mutates the pairs array.
+	 *
+	 * @param {Array} pairs
+	 * @param {String} key
+	 * @param {Mixed} val
+	 */
+
+	function pushEncodedKeyValuePair(pairs, key, val) {
+	  if (Array.isArray(val)) {
+	    return val.forEach(function(v) {
+	      pushEncodedKeyValuePair(pairs, key, v);
+	    });
+	  }
+	  pairs.push(encodeURIComponent(key)
+	    + '=' + encodeURIComponent(val));
+	}
+
+	/**
+	 * Expose serialization method.
+	 */
+
+	 request.serializeObject = serialize;
+
+	 /**
+	  * Parse the given x-www-form-urlencoded `str`.
+	  *
+	  * @param {String} str
+	  * @return {Object}
+	  * @api private
+	  */
+
+	function parseString(str) {
+	  var obj = {};
+	  var pairs = str.split('&');
+	  var parts;
+	  var pair;
+
+	  for (var i = 0, len = pairs.length; i < len; ++i) {
+	    pair = pairs[i];
+	    parts = pair.split('=');
+	    obj[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+	  }
+
+	  return obj;
+	}
+
+	/**
+	 * Expose parser.
+	 */
+
+	request.parseString = parseString;
+
+	/**
+	 * Default MIME type map.
+	 *
+	 *     superagent.types.xml = 'application/xml';
+	 *
+	 */
+
+	request.types = {
+	  html: 'text/html',
+	  json: 'application/json',
+	  xml: 'application/xml',
+	  urlencoded: 'application/x-www-form-urlencoded',
+	  'form': 'application/x-www-form-urlencoded',
+	  'form-data': 'application/x-www-form-urlencoded'
+	};
+
+	/**
+	 * Default serialization map.
+	 *
+	 *     superagent.serialize['application/xml'] = function(obj){
+	 *       return 'generated xml here';
+	 *     };
+	 *
+	 */
+
+	 request.serialize = {
+	   'application/x-www-form-urlencoded': serialize,
+	   'application/json': JSON.stringify
+	 };
+
+	 /**
+	  * Default parsers.
+	  *
+	  *     superagent.parse['application/xml'] = function(str){
+	  *       return { object parsed from str };
+	  *     };
+	  *
+	  */
+
+	request.parse = {
+	  'application/x-www-form-urlencoded': parseString,
+	  'application/json': JSON.parse
+	};
+
+	/**
+	 * Parse the given header `str` into
+	 * an object containing the mapped fields.
+	 *
+	 * @param {String} str
+	 * @return {Object}
+	 * @api private
+	 */
+
+	function parseHeader(str) {
+	  var lines = str.split(/\r?\n/);
+	  var fields = {};
+	  var index;
+	  var line;
+	  var field;
+	  var val;
+
+	  lines.pop(); // trailing CRLF
+
+	  for (var i = 0, len = lines.length; i < len; ++i) {
+	    line = lines[i];
+	    index = line.indexOf(':');
+	    field = line.slice(0, index).toLowerCase();
+	    val = trim(line.slice(index + 1));
+	    fields[field] = val;
+	  }
+
+	  return fields;
+	}
+
+	/**
+	 * Check if `mime` is json or has +json structured syntax suffix.
+	 *
+	 * @param {String} mime
+	 * @return {Boolean}
+	 * @api private
+	 */
+
+	function isJSON(mime) {
+	  return /[\/+]json\b/.test(mime);
+	}
+
+	/**
+	 * Return the mime type for the given `str`.
+	 *
+	 * @param {String} str
+	 * @return {String}
+	 * @api private
+	 */
+
+	function type(str){
+	  return str.split(/ *; */).shift();
+	};
+
+	/**
+	 * Return header field parameters.
+	 *
+	 * @param {String} str
+	 * @return {Object}
+	 * @api private
+	 */
+
+	function params(str){
+	  return reduce(str.split(/ *; */), function(obj, str){
+	    var parts = str.split(/ *= */)
+	      , key = parts.shift()
+	      , val = parts.shift();
+
+	    if (key && val) obj[key] = val;
+	    return obj;
+	  }, {});
+	};
+
+	/**
+	 * Initialize a new `Response` with the given `xhr`.
+	 *
+	 *  - set flags (.ok, .error, etc)
+	 *  - parse header
+	 *
+	 * Examples:
+	 *
+	 *  Aliasing `superagent` as `request` is nice:
+	 *
+	 *      request = superagent;
+	 *
+	 *  We can use the promise-like API, or pass callbacks:
+	 *
+	 *      request.get('/').end(function(res){});
+	 *      request.get('/', function(res){});
+	 *
+	 *  Sending data can be chained:
+	 *
+	 *      request
+	 *        .post('/user')
+	 *        .send({ name: 'tj' })
+	 *        .end(function(res){});
+	 *
+	 *  Or passed to `.send()`:
+	 *
+	 *      request
+	 *        .post('/user')
+	 *        .send({ name: 'tj' }, function(res){});
+	 *
+	 *  Or passed to `.post()`:
+	 *
+	 *      request
+	 *        .post('/user', { name: 'tj' })
+	 *        .end(function(res){});
+	 *
+	 * Or further reduced to a single call for simple cases:
+	 *
+	 *      request
+	 *        .post('/user', { name: 'tj' }, function(res){});
+	 *
+	 * @param {XMLHTTPRequest} xhr
+	 * @param {Object} options
+	 * @api private
+	 */
+
+	function Response(req, options) {
+	  options = options || {};
+	  this.req = req;
+	  this.xhr = this.req.xhr;
+	  // responseText is accessible only if responseType is '' or 'text' and on older browsers
+	  this.text = ((this.req.method !='HEAD' && (this.xhr.responseType === '' || this.xhr.responseType === 'text')) || typeof this.xhr.responseType === 'undefined')
+	     ? this.xhr.responseText
+	     : null;
+	  this.statusText = this.req.xhr.statusText;
+	  this.setStatusProperties(this.xhr.status);
+	  this.header = this.headers = parseHeader(this.xhr.getAllResponseHeaders());
+	  // getAllResponseHeaders sometimes falsely returns "" for CORS requests, but
+	  // getResponseHeader still works. so we get content-type even if getting
+	  // other headers fails.
+	  this.header['content-type'] = this.xhr.getResponseHeader('content-type');
+	  this.setHeaderProperties(this.header);
+	  this.body = this.req.method != 'HEAD'
+	    ? this.parseBody(this.text ? this.text : this.xhr.response)
+	    : null;
+	}
+
+	/**
+	 * Get case-insensitive `field` value.
+	 *
+	 * @param {String} field
+	 * @return {String}
+	 * @api public
+	 */
+
+	Response.prototype.get = function(field){
+	  return this.header[field.toLowerCase()];
+	};
+
+	/**
+	 * Set header related properties:
+	 *
+	 *   - `.type` the content type without params
+	 *
+	 * A response of "Content-Type: text/plain; charset=utf-8"
+	 * will provide you with a `.type` of "text/plain".
+	 *
+	 * @param {Object} header
+	 * @api private
+	 */
+
+	Response.prototype.setHeaderProperties = function(header){
+	  // content-type
+	  var ct = this.header['content-type'] || '';
+	  this.type = type(ct);
+
+	  // params
+	  var obj = params(ct);
+	  for (var key in obj) this[key] = obj[key];
+	};
+
+	/**
+	 * Parse the given body `str`.
+	 *
+	 * Used for auto-parsing of bodies. Parsers
+	 * are defined on the `superagent.parse` object.
+	 *
+	 * @param {String} str
+	 * @return {Mixed}
+	 * @api private
+	 */
+
+	Response.prototype.parseBody = function(str){
+	  var parse = request.parse[this.type];
+	  if (!parse && isJSON(this.type)) {
+	    parse = request.parse['application/json'];
+	  }
+	  return parse && str && (str.length || str instanceof Object)
+	    ? parse(str)
+	    : null;
+	};
+
+	/**
+	 * Set flags such as `.ok` based on `status`.
+	 *
+	 * For example a 2xx response will give you a `.ok` of __true__
+	 * whereas 5xx will be __false__ and `.error` will be __true__. The
+	 * `.clientError` and `.serverError` are also available to be more
+	 * specific, and `.statusType` is the class of error ranging from 1..5
+	 * sometimes useful for mapping respond colors etc.
+	 *
+	 * "sugar" properties are also defined for common cases. Currently providing:
+	 *
+	 *   - .noContent
+	 *   - .badRequest
+	 *   - .unauthorized
+	 *   - .notAcceptable
+	 *   - .notFound
+	 *
+	 * @param {Number} status
+	 * @api private
+	 */
+
+	Response.prototype.setStatusProperties = function(status){
+	  // handle IE9 bug: http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
+	  if (status === 1223) {
+	    status = 204;
+	  }
+
+	  var type = status / 100 | 0;
+
+	  // status / class
+	  this.status = this.statusCode = status;
+	  this.statusType = type;
+
+	  // basics
+	  this.info = 1 == type;
+	  this.ok = 2 == type;
+	  this.clientError = 4 == type;
+	  this.serverError = 5 == type;
+	  this.error = (4 == type || 5 == type)
+	    ? this.toError()
+	    : false;
+
+	  // sugar
+	  this.accepted = 202 == status;
+	  this.noContent = 204 == status;
+	  this.badRequest = 400 == status;
+	  this.unauthorized = 401 == status;
+	  this.notAcceptable = 406 == status;
+	  this.notFound = 404 == status;
+	  this.forbidden = 403 == status;
+	};
+
+	/**
+	 * Return an `Error` representative of this response.
+	 *
+	 * @return {Error}
+	 * @api public
+	 */
+
+	Response.prototype.toError = function(){
+	  var req = this.req;
+	  var method = req.method;
+	  var url = req.url;
+
+	  var msg = 'cannot ' + method + ' ' + url + ' (' + this.status + ')';
+	  var err = new Error(msg);
+	  err.status = this.status;
+	  err.method = method;
+	  err.url = url;
+
+	  return err;
+	};
+
+	/**
+	 * Expose `Response`.
+	 */
+
+	request.Response = Response;
+
+	/**
+	 * Initialize a new `Request` with the given `method` and `url`.
+	 *
+	 * @param {String} method
+	 * @param {String} url
+	 * @api public
+	 */
+
+	function Request(method, url) {
+	  var self = this;
+	  this._query = this._query || [];
+	  this.method = method;
+	  this.url = url;
+	  this.header = {}; // preserves header name case
+	  this._header = {}; // coerces header names to lowercase
+	  this.on('end', function(){
+	    var err = null;
+	    var res = null;
+
+	    try {
+	      res = new Response(self);
+	    } catch(e) {
+	      err = new Error('Parser is unable to parse the response');
+	      err.parse = true;
+	      err.original = e;
+	      // issue #675: return the raw response if the response parsing fails
+	      err.rawResponse = self.xhr && self.xhr.responseText ? self.xhr.responseText : null;
+	      // issue #876: return the http status code if the response parsing fails
+	      err.statusCode = self.xhr && self.xhr.status ? self.xhr.status : null;
+	      return self.callback(err);
+	    }
+
+	    self.emit('response', res);
+
+	    if (err) {
+	      return self.callback(err, res);
+	    }
+
+	    if (res.status >= 200 && res.status < 300) {
+	      return self.callback(err, res);
+	    }
+
+	    var new_err = new Error(res.statusText || 'Unsuccessful HTTP response');
+	    new_err.original = err;
+	    new_err.response = res;
+	    new_err.status = res.status;
+
+	    self.callback(new_err, res);
+	  });
+	}
+
+	/**
+	 * Mixin `Emitter` and `requestBase`.
+	 */
+
+	Emitter(Request.prototype);
+	for (var key in requestBase) {
+	  Request.prototype[key] = requestBase[key];
+	}
+
+	/**
+	 * Abort the request, and clear potential timeout.
+	 *
+	 * @return {Request}
+	 * @api public
+	 */
+
+	Request.prototype.abort = function(){
+	  if (this.aborted) return;
+	  this.aborted = true;
+	  this.xhr.abort();
+	  this.clearTimeout();
+	  this.emit('abort');
+	  return this;
+	};
+
+	/**
+	 * Set Content-Type to `type`, mapping values from `request.types`.
+	 *
+	 * Examples:
+	 *
+	 *      superagent.types.xml = 'application/xml';
+	 *
+	 *      request.post('/')
+	 *        .type('xml')
+	 *        .send(xmlstring)
+	 *        .end(callback);
+	 *
+	 *      request.post('/')
+	 *        .type('application/xml')
+	 *        .send(xmlstring)
+	 *        .end(callback);
+	 *
+	 * @param {String} type
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.type = function(type){
+	  this.set('Content-Type', request.types[type] || type);
+	  return this;
+	};
+
+	/**
+	 * Set responseType to `val`. Presently valid responseTypes are 'blob' and 
+	 * 'arraybuffer'.
+	 *
+	 * Examples:
+	 *
+	 *      req.get('/')
+	 *        .responseType('blob')
+	 *        .end(callback);
+	 *
+	 * @param {String} val
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.responseType = function(val){
+	  this._responseType = val;
+	  return this;
+	};
+
+	/**
+	 * Set Accept to `type`, mapping values from `request.types`.
+	 *
+	 * Examples:
+	 *
+	 *      superagent.types.json = 'application/json';
+	 *
+	 *      request.get('/agent')
+	 *        .accept('json')
+	 *        .end(callback);
+	 *
+	 *      request.get('/agent')
+	 *        .accept('application/json')
+	 *        .end(callback);
+	 *
+	 * @param {String} accept
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.accept = function(type){
+	  this.set('Accept', request.types[type] || type);
+	  return this;
+	};
+
+	/**
+	 * Set Authorization field value with `user` and `pass`.
+	 *
+	 * @param {String} user
+	 * @param {String} pass
+	 * @param {Object} options with 'type' property 'auto' or 'basic' (default 'basic')
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.auth = function(user, pass, options){
+	  if (!options) {
+	    options = {
+	      type: 'basic'
+	    }
+	  }
+
+	  switch (options.type) {
+	    case 'basic':
+	      var str = btoa(user + ':' + pass);
+	      this.set('Authorization', 'Basic ' + str);
+	    break;
+
+	    case 'auto':
+	      this.username = user;
+	      this.password = pass;
+	    break;
+	  }
+	  return this;
+	};
+
+	/**
+	* Add query-string `val`.
+	*
+	* Examples:
+	*
+	*   request.get('/shoes')
+	*     .query('size=10')
+	*     .query({ color: 'blue' })
+	*
+	* @param {Object|String} val
+	* @return {Request} for chaining
+	* @api public
+	*/
+
+	Request.prototype.query = function(val){
+	  if ('string' != typeof val) val = serialize(val);
+	  if (val) this._query.push(val);
+	  return this;
+	};
+
+	/**
+	 * Queue the given `file` as an attachment to the specified `field`,
+	 * with optional `filename`.
+	 *
+	 * ``` js
+	 * request.post('/upload')
+	 *   .attach(new Blob(['<a id="a"><b id="b">hey!</b></a>'], { type: "text/html"}))
+	 *   .end(callback);
+	 * ```
+	 *
+	 * @param {String} field
+	 * @param {Blob|File} file
+	 * @param {String} filename
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.attach = function(field, file, filename){
+	  this._getFormData().append(field, file, filename || file.name);
+	  return this;
+	};
+
+	Request.prototype._getFormData = function(){
+	  if (!this._formData) {
+	    this._formData = new root.FormData();
+	  }
+	  return this._formData;
+	};
+
+	/**
+	 * Send `data` as the request body, defaulting the `.type()` to "json" when
+	 * an object is given.
+	 *
+	 * Examples:
+	 *
+	 *       // manual json
+	 *       request.post('/user')
+	 *         .type('json')
+	 *         .send('{"name":"tj"}')
+	 *         .end(callback)
+	 *
+	 *       // auto json
+	 *       request.post('/user')
+	 *         .send({ name: 'tj' })
+	 *         .end(callback)
+	 *
+	 *       // manual x-www-form-urlencoded
+	 *       request.post('/user')
+	 *         .type('form')
+	 *         .send('name=tj')
+	 *         .end(callback)
+	 *
+	 *       // auto x-www-form-urlencoded
+	 *       request.post('/user')
+	 *         .type('form')
+	 *         .send({ name: 'tj' })
+	 *         .end(callback)
+	 *
+	 *       // defaults to x-www-form-urlencoded
+	  *      request.post('/user')
+	  *        .send('name=tobi')
+	  *        .send('species=ferret')
+	  *        .end(callback)
+	 *
+	 * @param {String|Object} data
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.send = function(data){
+	  var obj = isObject(data);
+	  var type = this._header['content-type'];
+
+	  // merge
+	  if (obj && isObject(this._data)) {
+	    for (var key in data) {
+	      this._data[key] = data[key];
+	    }
+	  } else if ('string' == typeof data) {
+	    if (!type) this.type('form');
+	    type = this._header['content-type'];
+	    if ('application/x-www-form-urlencoded' == type) {
+	      this._data = this._data
+	        ? this._data + '&' + data
+	        : data;
+	    } else {
+	      this._data = (this._data || '') + data;
+	    }
+	  } else {
+	    this._data = data;
+	  }
+
+	  if (!obj || isHost(data)) return this;
+	  if (!type) this.type('json');
+	  return this;
+	};
+
+	/**
+	 * @deprecated
+	 */
+	Response.prototype.parse = function serialize(fn){
+	  if (root.console) {
+	    console.warn("Client-side parse() method has been renamed to serialize(). This method is not compatible with superagent v2.0");
+	  }
+	  this.serialize(fn);
+	  return this;
+	};
+
+	Response.prototype.serialize = function serialize(fn){
+	  this._parser = fn;
+	  return this;
+	};
+
+	/**
+	 * Invoke the callback with `err` and `res`
+	 * and handle arity check.
+	 *
+	 * @param {Error} err
+	 * @param {Response} res
+	 * @api private
+	 */
+
+	Request.prototype.callback = function(err, res){
+	  var fn = this._callback;
+	  this.clearTimeout();
+	  fn(err, res);
+	};
+
+	/**
+	 * Invoke callback with x-domain error.
+	 *
+	 * @api private
+	 */
+
+	Request.prototype.crossDomainError = function(){
+	  var err = new Error('Request has been terminated\nPossible causes: the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.');
+	  err.crossDomain = true;
+
+	  err.status = this.status;
+	  err.method = this.method;
+	  err.url = this.url;
+
+	  this.callback(err);
+	};
+
+	/**
+	 * Invoke callback with timeout error.
+	 *
+	 * @api private
+	 */
+
+	Request.prototype.timeoutError = function(){
+	  var timeout = this._timeout;
+	  var err = new Error('timeout of ' + timeout + 'ms exceeded');
+	  err.timeout = timeout;
+	  this.callback(err);
+	};
+
+	/**
+	 * Enable transmission of cookies with x-domain requests.
+	 *
+	 * Note that for this to work the origin must not be
+	 * using "Access-Control-Allow-Origin" with a wildcard,
+	 * and also must set "Access-Control-Allow-Credentials"
+	 * to "true".
+	 *
+	 * @api public
+	 */
+
+	Request.prototype.withCredentials = function(){
+	  this._withCredentials = true;
+	  return this;
+	};
+
+	/**
+	 * Initiate request, invoking callback `fn(res)`
+	 * with an instanceof `Response`.
+	 *
+	 * @param {Function} fn
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.end = function(fn){
+	  var self = this;
+	  var xhr = this.xhr = request.getXHR();
+	  var query = this._query.join('&');
+	  var timeout = this._timeout;
+	  var data = this._formData || this._data;
+
+	  // store callback
+	  this._callback = fn || noop;
+
+	  // state change
+	  xhr.onreadystatechange = function(){
+	    if (4 != xhr.readyState) return;
+
+	    // In IE9, reads to any property (e.g. status) off of an aborted XHR will
+	    // result in the error "Could not complete the operation due to error c00c023f"
+	    var status;
+	    try { status = xhr.status } catch(e) { status = 0; }
+
+	    if (0 == status) {
+	      if (self.timedout) return self.timeoutError();
+	      if (self.aborted) return;
+	      return self.crossDomainError();
+	    }
+	    self.emit('end');
+	  };
+
+	  // progress
+	  var handleProgress = function(e){
+	    if (e.total > 0) {
+	      e.percent = e.loaded / e.total * 100;
+	    }
+	    e.direction = 'download';
+	    self.emit('progress', e);
+	  };
+	  if (this.hasListeners('progress')) {
+	    xhr.onprogress = handleProgress;
+	  }
+	  try {
+	    if (xhr.upload && this.hasListeners('progress')) {
+	      xhr.upload.onprogress = handleProgress;
+	    }
+	  } catch(e) {
+	    // Accessing xhr.upload fails in IE from a web worker, so just pretend it doesn't exist.
+	    // Reported here:
+	    // https://connect.microsoft.com/IE/feedback/details/837245/xmlhttprequest-upload-throws-invalid-argument-when-used-from-web-worker-context
+	  }
+
+	  // timeout
+	  if (timeout && !this._timer) {
+	    this._timer = setTimeout(function(){
+	      self.timedout = true;
+	      self.abort();
+	    }, timeout);
+	  }
+
+	  // querystring
+	  if (query) {
+	    query = request.serializeObject(query);
+	    this.url += ~this.url.indexOf('?')
+	      ? '&' + query
+	      : '?' + query;
+	  }
+
+	  // initiate request
+	  if (this.username && this.password) {
+	    xhr.open(this.method, this.url, true, this.username, this.password);
+	  } else {
+	    xhr.open(this.method, this.url, true);
+	  }
+
+	  // CORS
+	  if (this._withCredentials) xhr.withCredentials = true;
+
+	  // body
+	  if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !isHost(data)) {
+	    // serialize stuff
+	    var contentType = this._header['content-type'];
+	    var serialize = this._parser || request.serialize[contentType ? contentType.split(';')[0] : ''];
+	    if (!serialize && isJSON(contentType)) serialize = request.serialize['application/json'];
+	    if (serialize) data = serialize(data);
+	  }
+
+	  // set header fields
+	  for (var field in this.header) {
+	    if (null == this.header[field]) continue;
+	    xhr.setRequestHeader(field, this.header[field]);
+	  }
+
+	  if (this._responseType) {
+	    xhr.responseType = this._responseType;
+	  }
+
+	  // send stuff
+	  this.emit('request', this);
+
+	  // IE11 xhr.send(undefined) sends 'undefined' string as POST payload (instead of nothing)
+	  // We need null here if data is undefined
+	  xhr.send(typeof data !== 'undefined' ? data : null);
+	  return this;
+	};
+
+
+	/**
+	 * Expose `Request`.
+	 */
+
+	request.Request = Request;
+
+	/**
+	 * GET `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} data or fn
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.get = function(url, data, fn){
+	  var req = request('GET', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.query(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * HEAD `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} data or fn
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.head = function(url, data, fn){
+	  var req = request('HEAD', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * DELETE `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	function del(url, fn){
+	  var req = request('DELETE', url);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	request['del'] = del;
+	request['delete'] = del;
+
+	/**
+	 * PATCH `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed} data
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.patch = function(url, data, fn){
+	  var req = request('PATCH', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * POST `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed} data
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.post = function(url, data, fn){
+	  var req = request('POST', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * PUT `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} data or fn
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.put = function(url, data, fn){
+	  var req = request('PUT', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * Expose `Emitter`.
+	 */
+
+	if (true) {
+	  module.exports = Emitter;
+	}
+
+	/**
+	 * Initialize a new `Emitter`.
+	 *
+	 * @api public
+	 */
+
+	function Emitter(obj) {
+	  if (obj) return mixin(obj);
+	};
+
+	/**
+	 * Mixin the emitter properties.
+	 *
+	 * @param {Object} obj
+	 * @return {Object}
+	 * @api private
+	 */
+
+	function mixin(obj) {
+	  for (var key in Emitter.prototype) {
+	    obj[key] = Emitter.prototype[key];
+	  }
+	  return obj;
+	}
+
+	/**
+	 * Listen on the given `event` with `fn`.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+
+	Emitter.prototype.on =
+	Emitter.prototype.addEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+	  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+	    .push(fn);
+	  return this;
+	};
+
+	/**
+	 * Adds an `event` listener that will be invoked a single
+	 * time then automatically removed.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+
+	Emitter.prototype.once = function(event, fn){
+	  function on() {
+	    this.off(event, on);
+	    fn.apply(this, arguments);
+	  }
+
+	  on.fn = fn;
+	  this.on(event, on);
+	  return this;
+	};
+
+	/**
+	 * Remove the given callback for `event` or all
+	 * registered callbacks.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+
+	Emitter.prototype.off =
+	Emitter.prototype.removeListener =
+	Emitter.prototype.removeAllListeners =
+	Emitter.prototype.removeEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+
+	  // all
+	  if (0 == arguments.length) {
+	    this._callbacks = {};
+	    return this;
+	  }
+
+	  // specific event
+	  var callbacks = this._callbacks['$' + event];
+	  if (!callbacks) return this;
+
+	  // remove all handlers
+	  if (1 == arguments.length) {
+	    delete this._callbacks['$' + event];
+	    return this;
+	  }
+
+	  // remove specific handler
+	  var cb;
+	  for (var i = 0; i < callbacks.length; i++) {
+	    cb = callbacks[i];
+	    if (cb === fn || cb.fn === fn) {
+	      callbacks.splice(i, 1);
+	      break;
+	    }
+	  }
+	  return this;
+	};
+
+	/**
+	 * Emit `event` with the given args.
+	 *
+	 * @param {String} event
+	 * @param {Mixed} ...
+	 * @return {Emitter}
+	 */
+
+	Emitter.prototype.emit = function(event){
+	  this._callbacks = this._callbacks || {};
+	  var args = [].slice.call(arguments, 1)
+	    , callbacks = this._callbacks['$' + event];
+
+	  if (callbacks) {
+	    callbacks = callbacks.slice(0);
+	    for (var i = 0, len = callbacks.length; i < len; ++i) {
+	      callbacks[i].apply(this, args);
+	    }
+	  }
+
+	  return this;
+	};
+
+	/**
+	 * Return array of callbacks for `event`.
+	 *
+	 * @param {String} event
+	 * @return {Array}
+	 * @api public
+	 */
+
+	Emitter.prototype.listeners = function(event){
+	  this._callbacks = this._callbacks || {};
+	  return this._callbacks['$' + event] || [];
+	};
+
+	/**
+	 * Check if this emitter has `event` handlers.
+	 *
+	 * @param {String} event
+	 * @return {Boolean}
+	 * @api public
+	 */
+
+	Emitter.prototype.hasListeners = function(event){
+	  return !! this.listeners(event).length;
+	};
+
+
+/***/ },
+/* 173 */
+/***/ function(module, exports) {
+
+	
+	/**
+	 * Reduce `arr` with `fn`.
+	 *
+	 * @param {Array} arr
+	 * @param {Function} fn
+	 * @param {Mixed} initial
+	 *
+	 * TODO: combatible error handling?
+	 */
+
+	module.exports = function(arr, fn, initial){  
+	  var idx = 0;
+	  var len = arr.length;
+	  var curr = arguments.length == 3
+	    ? initial
+	    : arr[idx++];
+
+	  while (idx < len) {
+	    curr = fn.call(null, curr, arr[idx], ++idx, arr);
+	  }
+	  
+	  return curr;
+	};
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Module of mixed-in functions shared between node and client code
+	 */
+	var isObject = __webpack_require__(175);
+
+	/**
+	 * Clear previous timeout.
+	 *
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	exports.clearTimeout = function _clearTimeout(){
+	  this._timeout = 0;
+	  clearTimeout(this._timer);
+	  return this;
+	};
+
+	/**
+	 * Force given parser
+	 *
+	 * Sets the body parser no matter type.
+	 *
+	 * @param {Function}
+	 * @api public
+	 */
+
+	exports.parse = function parse(fn){
+	  this._parser = fn;
+	  return this;
+	};
+
+	/**
+	 * Set timeout to `ms`.
+	 *
+	 * @param {Number} ms
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	exports.timeout = function timeout(ms){
+	  this._timeout = ms;
+	  return this;
+	};
+
+	/**
+	 * Faux promise support
+	 *
+	 * @param {Function} fulfill
+	 * @param {Function} reject
+	 * @return {Request}
+	 */
+
+	exports.then = function then(fulfill, reject) {
+	  return this.end(function(err, res) {
+	    err ? reject(err) : fulfill(res);
+	  });
+	}
+
+	/**
+	 * Allow for extension
+	 */
+
+	exports.use = function use(fn) {
+	  fn(this);
+	  return this;
+	}
+
+
+	/**
+	 * Get request header `field`.
+	 * Case-insensitive.
+	 *
+	 * @param {String} field
+	 * @return {String}
+	 * @api public
+	 */
+
+	exports.get = function(field){
+	  return this._header[field.toLowerCase()];
+	};
+
+	/**
+	 * Get case-insensitive header `field` value.
+	 * This is a deprecated internal API. Use `.get(field)` instead.
+	 *
+	 * (getHeader is no longer used internally by the superagent code base)
+	 *
+	 * @param {String} field
+	 * @return {String}
+	 * @api private
+	 * @deprecated
+	 */
+
+	exports.getHeader = exports.get;
+
+	/**
+	 * Set header `field` to `val`, or multiple fields with one object.
+	 * Case-insensitive.
+	 *
+	 * Examples:
+	 *
+	 *      req.get('/')
+	 *        .set('Accept', 'application/json')
+	 *        .set('X-API-Key', 'foobar')
+	 *        .end(callback);
+	 *
+	 *      req.get('/')
+	 *        .set({ Accept: 'application/json', 'X-API-Key': 'foobar' })
+	 *        .end(callback);
+	 *
+	 * @param {String|Object} field
+	 * @param {String} val
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	exports.set = function(field, val){
+	  if (isObject(field)) {
+	    for (var key in field) {
+	      this.set(key, field[key]);
+	    }
+	    return this;
+	  }
+	  this._header[field.toLowerCase()] = val;
+	  this.header[field] = val;
+	  return this;
+	};
+
+	/**
+	 * Remove header `field`.
+	 * Case-insensitive.
+	 *
+	 * Example:
+	 *
+	 *      req.get('/')
+	 *        .unset('User-Agent')
+	 *        .end(callback);
+	 *
+	 * @param {String} field
+	 */
+	exports.unset = function(field){
+	  delete this._header[field.toLowerCase()];
+	  delete this.header[field];
+	  return this;
+	};
+
+	/**
+	 * Write the field `name` and `val` for "multipart/form-data"
+	 * request bodies.
+	 *
+	 * ``` js
+	 * request.post('/upload')
+	 *   .field('foo', 'bar')
+	 *   .end(callback);
+	 * ```
+	 *
+	 * @param {String} name
+	 * @param {String|Blob|File|Buffer|fs.ReadStream} val
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	exports.field = function(name, val) {
+	  this._getFormData().append(name, val);
+	  return this;
+	};
+
+
+/***/ },
+/* 175 */
+/***/ function(module, exports) {
+
+	/**
+	 * Check if `obj` is an object.
+	 *
+	 * @param {Object} obj
+	 * @return {Boolean}
+	 * @api private
+	 */
+
+	function isObject(obj) {
+	  return null != obj && 'object' == typeof obj;
+	}
+
+	module.exports = isObject;
+
+
+/***/ },
+/* 176 */
+/***/ function(module, exports) {
+
+	// The node and browser modules expose versions of this with the
+	// appropriate constructor function bound as first argument
+	/**
+	 * Issue a request:
+	 *
+	 * Examples:
+	 *
+	 *    request('GET', '/users').end(callback)
+	 *    request('/users').end(callback)
+	 *    request('/users', callback)
+	 *
+	 * @param {String} method
+	 * @param {String|Function} url or callback
+	 * @return {Request}
+	 * @api public
+	 */
+
+	function request(RequestConstructor, method, url) {
+	  // callback
+	  if ('function' == typeof url) {
+	    return new RequestConstructor('GET', method).end(url);
+	  }
+
+	  // url first
+	  if (2 == arguments.length) {
+	    return new RequestConstructor('GET', method);
+	  }
+
+	  return new RequestConstructor(method, url);
+	}
+
+	module.exports = request;
+
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -36451,7 +38261,7 @@
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _champions = __webpack_require__(172);
+	var _champions = __webpack_require__(178);
 
 	var _champions2 = _interopRequireDefault(_champions);
 
@@ -36510,14 +38320,14 @@
 	    value: function render() {
 	      var style = {};
 	      Object.assign(style, this.props.iconstyle);
-	      style.backgroundImage = 'url(' + this.getChampionUrl(this.state.champs[this.state.active].champion_id) + ')';
+	      style.backgroundImage = 'url(' + this.getChampionUrl(this.state.champs[this.state.active].championId) + ')';
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'mastery-icon', style: style },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'mastery-text' },
-	          '#' + (this.state.active + 1) + ' ' + this.fPoints(this.state.champs[this.state.active].points)
+	          '#' + (this.state.active + 1) + ' ' + this.fPoints(this.state.champs[this.state.active].championPoints)
 	        )
 	      );
 	    }
@@ -36534,7 +38344,7 @@
 	exports.default = ChampSlider;
 
 /***/ },
-/* 172 */
+/* 178 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36545,7 +38355,7 @@
 	exports.default = JSON.parse("{\n\t\"type\": \"champion\",\n\t\"version\": \"6.9.1\",\n\t\"data\": {\n\t\t\"Thresh\": {\n\t\t\t\"id\": 412,\n\t\t\t\"key\": \"Thresh\",\n\t\t\t\"name\": \"Thresh\",\n\t\t\t\"title\": \"the Chain Warden\"\n\t\t},\n\t\t\"Aatrox\": {\n\t\t\t\"id\": 266,\n\t\t\t\"key\": \"Aatrox\",\n\t\t\t\"name\": \"Aatrox\",\n\t\t\t\"title\": \"the Darkin Blade\"\n\t\t},\n\t\t\"Tryndamere\": {\n\t\t\t\"id\": 23,\n\t\t\t\"key\": \"Tryndamere\",\n\t\t\t\"name\": \"Tryndamere\",\n\t\t\t\"title\": \"the Barbarian King\"\n\t\t},\n\t\t\"Gragas\": {\n\t\t\t\"id\": 79,\n\t\t\t\"key\": \"Gragas\",\n\t\t\t\"name\": \"Gragas\",\n\t\t\t\"title\": \"the Rabble Rouser\"\n\t\t},\n\t\t\"Cassiopeia\": {\n\t\t\t\"id\": 69,\n\t\t\t\"key\": \"Cassiopeia\",\n\t\t\t\"name\": \"Cassiopeia\",\n\t\t\t\"title\": \"the Serpent's Embrace\"\n\t\t},\n\t\t\"AurelionSol\": {\n\t\t\t\"id\": 136,\n\t\t\t\"key\": \"AurelionSol\",\n\t\t\t\"name\": \"Aurelion Sol\",\n\t\t\t\"title\": \"The Star Forger\"\n\t\t},\n\t\t\"Ryze\": {\n\t\t\t\"id\": 13,\n\t\t\t\"key\": \"Ryze\",\n\t\t\t\"name\": \"Ryze\",\n\t\t\t\"title\": \"the Rogue Mage\"\n\t\t},\n\t\t\"Poppy\": {\n\t\t\t\"id\": 78,\n\t\t\t\"key\": \"Poppy\",\n\t\t\t\"name\": \"Poppy\",\n\t\t\t\"title\": \"Keeper of the Hammer\"\n\t\t},\n\t\t\"Sion\": {\n\t\t\t\"id\": 14,\n\t\t\t\"key\": \"Sion\",\n\t\t\t\"name\": \"Sion\",\n\t\t\t\"title\": \"The Undead Juggernaut\"\n\t\t},\n\t\t\"Jhin\": {\n\t\t\t\"id\": 202,\n\t\t\t\"key\": \"Jhin\",\n\t\t\t\"name\": \"Jhin\",\n\t\t\t\"title\": \"the Virtuoso\"\n\t\t},\n\t\t\"Annie\": {\n\t\t\t\"id\": 1,\n\t\t\t\"key\": \"Annie\",\n\t\t\t\"name\": \"Annie\",\n\t\t\t\"title\": \"the Dark Child\"\n\t\t},\n\t\t\"Nautilus\": {\n\t\t\t\"id\": 111,\n\t\t\t\"key\": \"Nautilus\",\n\t\t\t\"name\": \"Nautilus\",\n\t\t\t\"title\": \"the Titan of the Depths\"\n\t\t},\n\t\t\"Karma\": {\n\t\t\t\"id\": 43,\n\t\t\t\"key\": \"Karma\",\n\t\t\t\"name\": \"Karma\",\n\t\t\t\"title\": \"the Enlightened One\"\n\t\t},\n\t\t\"Lux\": {\n\t\t\t\"id\": 99,\n\t\t\t\"key\": \"Lux\",\n\t\t\t\"name\": \"Lux\",\n\t\t\t\"title\": \"the Lady of Luminosity\"\n\t\t},\n\t\t\"Ahri\": {\n\t\t\t\"id\": 103,\n\t\t\t\"key\": \"Ahri\",\n\t\t\t\"name\": \"Ahri\",\n\t\t\t\"title\": \"the Nine-Tailed Fox\"\n\t\t},\n\t\t\"Olaf\": {\n\t\t\t\"id\": 2,\n\t\t\t\"key\": \"Olaf\",\n\t\t\t\"name\": \"Olaf\",\n\t\t\t\"title\": \"the Berserker\"\n\t\t},\n\t\t\"Viktor\": {\n\t\t\t\"id\": 112,\n\t\t\t\"key\": \"Viktor\",\n\t\t\t\"name\": \"Viktor\",\n\t\t\t\"title\": \"the Machine Herald\"\n\t\t},\n\t\t\"Singed\": {\n\t\t\t\"id\": 27,\n\t\t\t\"key\": \"Singed\",\n\t\t\t\"name\": \"Singed\",\n\t\t\t\"title\": \"the Mad Chemist\"\n\t\t},\n\t\t\"Garen\": {\n\t\t\t\"id\": 86,\n\t\t\t\"key\": \"Garen\",\n\t\t\t\"name\": \"Garen\",\n\t\t\t\"title\": \"The Might of Demacia\"\n\t\t},\n\t\t\"Anivia\": {\n\t\t\t\"id\": 34,\n\t\t\t\"key\": \"Anivia\",\n\t\t\t\"name\": \"Anivia\",\n\t\t\t\"title\": \"the Cryophoenix\"\n\t\t},\n\t\t\"Maokai\": {\n\t\t\t\"id\": 57,\n\t\t\t\"key\": \"Maokai\",\n\t\t\t\"name\": \"Maokai\",\n\t\t\t\"title\": \"the Twisted Treant\"\n\t\t},\n\t\t\"Lissandra\": {\n\t\t\t\"id\": 127,\n\t\t\t\"key\": \"Lissandra\",\n\t\t\t\"name\": \"Lissandra\",\n\t\t\t\"title\": \"the Ice Witch\"\n\t\t},\n\t\t\"Morgana\": {\n\t\t\t\"id\": 25,\n\t\t\t\"key\": \"Morgana\",\n\t\t\t\"name\": \"Morgana\",\n\t\t\t\"title\": \"Fallen Angel\"\n\t\t},\n\t\t\"Fizz\": {\n\t\t\t\"id\": 105,\n\t\t\t\"key\": \"Fizz\",\n\t\t\t\"name\": \"Fizz\",\n\t\t\t\"title\": \"the Tidal Trickster\"\n\t\t},\n\t\t\"Evelynn\": {\n\t\t\t\"id\": 28,\n\t\t\t\"key\": \"Evelynn\",\n\t\t\t\"name\": \"Evelynn\",\n\t\t\t\"title\": \"the Widowmaker\"\n\t\t},\n\t\t\"Zed\": {\n\t\t\t\"id\": 238,\n\t\t\t\"key\": \"Zed\",\n\t\t\t\"name\": \"Zed\",\n\t\t\t\"title\": \"the Master of Shadows\"\n\t\t},\n\t\t\"Heimerdinger\": {\n\t\t\t\"id\": 74,\n\t\t\t\"key\": \"Heimerdinger\",\n\t\t\t\"name\": \"Heimerdinger\",\n\t\t\t\"title\": \"the Revered Inventor\"\n\t\t},\n\t\t\"Rumble\": {\n\t\t\t\"id\": 68,\n\t\t\t\"key\": \"Rumble\",\n\t\t\t\"name\": \"Rumble\",\n\t\t\t\"title\": \"the Mechanized Menace\"\n\t\t},\n\t\t\"Sona\": {\n\t\t\t\"id\": 37,\n\t\t\t\"key\": \"Sona\",\n\t\t\t\"name\": \"Sona\",\n\t\t\t\"title\": \"Maven of the Strings\"\n\t\t},\n\t\t\"Mordekaiser\": {\n\t\t\t\"id\": 82,\n\t\t\t\"key\": \"Mordekaiser\",\n\t\t\t\"name\": \"Mordekaiser\",\n\t\t\t\"title\": \"the Iron Revenant\"\n\t\t},\n\t\t\"KogMaw\": {\n\t\t\t\"id\": 96,\n\t\t\t\"key\": \"KogMaw\",\n\t\t\t\"name\": \"Kog'Maw\",\n\t\t\t\"title\": \"the Mouth of the Abyss\"\n\t\t},\n\t\t\"Katarina\": {\n\t\t\t\"id\": 55,\n\t\t\t\"key\": \"Katarina\",\n\t\t\t\"name\": \"Katarina\",\n\t\t\t\"title\": \"the Sinister Blade\"\n\t\t},\n\t\t\"Lulu\": {\n\t\t\t\"id\": 117,\n\t\t\t\"key\": \"Lulu\",\n\t\t\t\"name\": \"Lulu\",\n\t\t\t\"title\": \"the Fae Sorceress\"\n\t\t},\n\t\t\"Ashe\": {\n\t\t\t\"id\": 22,\n\t\t\t\"key\": \"Ashe\",\n\t\t\t\"name\": \"Ashe\",\n\t\t\t\"title\": \"the Frost Archer\"\n\t\t},\n\t\t\"Karthus\": {\n\t\t\t\"id\": 30,\n\t\t\t\"key\": \"Karthus\",\n\t\t\t\"name\": \"Karthus\",\n\t\t\t\"title\": \"the Deathsinger\"\n\t\t},\n\t\t\"Alistar\": {\n\t\t\t\"id\": 12,\n\t\t\t\"key\": \"Alistar\",\n\t\t\t\"name\": \"Alistar\",\n\t\t\t\"title\": \"the Minotaur\"\n\t\t},\n\t\t\"Darius\": {\n\t\t\t\"id\": 122,\n\t\t\t\"key\": \"Darius\",\n\t\t\t\"name\": \"Darius\",\n\t\t\t\"title\": \"the Hand of Noxus\"\n\t\t},\n\t\t\"Vayne\": {\n\t\t\t\"id\": 67,\n\t\t\t\"key\": \"Vayne\",\n\t\t\t\"name\": \"Vayne\",\n\t\t\t\"title\": \"the Night Hunter\"\n\t\t},\n\t\t\"Varus\": {\n\t\t\t\"id\": 110,\n\t\t\t\"key\": \"Varus\",\n\t\t\t\"name\": \"Varus\",\n\t\t\t\"title\": \"the Arrow of Retribution\"\n\t\t},\n\t\t\"Udyr\": {\n\t\t\t\"id\": 77,\n\t\t\t\"key\": \"Udyr\",\n\t\t\t\"name\": \"Udyr\",\n\t\t\t\"title\": \"the Spirit Walker\"\n\t\t},\n\t\t\"Leona\": {\n\t\t\t\"id\": 89,\n\t\t\t\"key\": \"Leona\",\n\t\t\t\"name\": \"Leona\",\n\t\t\t\"title\": \"the Radiant Dawn\"\n\t\t},\n\t\t\"Jayce\": {\n\t\t\t\"id\": 126,\n\t\t\t\"key\": \"Jayce\",\n\t\t\t\"name\": \"Jayce\",\n\t\t\t\"title\": \"the Defender of Tomorrow\"\n\t\t},\n\t\t\"Syndra\": {\n\t\t\t\"id\": 134,\n\t\t\t\"key\": \"Syndra\",\n\t\t\t\"name\": \"Syndra\",\n\t\t\t\"title\": \"the Dark Sovereign\"\n\t\t},\n\t\t\"Pantheon\": {\n\t\t\t\"id\": 80,\n\t\t\t\"key\": \"Pantheon\",\n\t\t\t\"name\": \"Pantheon\",\n\t\t\t\"title\": \"the Artisan of War\"\n\t\t},\n\t\t\"Riven\": {\n\t\t\t\"id\": 92,\n\t\t\t\"key\": \"Riven\",\n\t\t\t\"name\": \"Riven\",\n\t\t\t\"title\": \"the Exile\"\n\t\t},\n\t\t\"Khazix\": {\n\t\t\t\"id\": 121,\n\t\t\t\"key\": \"Khazix\",\n\t\t\t\"name\": \"Kha'Zix\",\n\t\t\t\"title\": \"the Voidreaver\"\n\t\t},\n\t\t\"Corki\": {\n\t\t\t\"id\": 42,\n\t\t\t\"key\": \"Corki\",\n\t\t\t\"name\": \"Corki\",\n\t\t\t\"title\": \"the Daring Bombardier\"\n\t\t},\n\t\t\"Caitlyn\": {\n\t\t\t\"id\": 51,\n\t\t\t\"key\": \"Caitlyn\",\n\t\t\t\"name\": \"Caitlyn\",\n\t\t\t\"title\": \"the Sheriff of Piltover\"\n\t\t},\n\t\t\"Azir\": {\n\t\t\t\"id\": 268,\n\t\t\t\"key\": \"Azir\",\n\t\t\t\"name\": \"Azir\",\n\t\t\t\"title\": \"the Emperor of the Sands\"\n\t\t},\n\t\t\"Nidalee\": {\n\t\t\t\"id\": 76,\n\t\t\t\"key\": \"Nidalee\",\n\t\t\t\"name\": \"Nidalee\",\n\t\t\t\"title\": \"the Bestial Huntress\"\n\t\t},\n\t\t\"Kennen\": {\n\t\t\t\"id\": 85,\n\t\t\t\"key\": \"Kennen\",\n\t\t\t\"name\": \"Kennen\",\n\t\t\t\"title\": \"the Heart of the Tempest\"\n\t\t},\n\t\t\"Galio\": {\n\t\t\t\"id\": 3,\n\t\t\t\"key\": \"Galio\",\n\t\t\t\"name\": \"Galio\",\n\t\t\t\"title\": \"the Sentinel's Sorrow\"\n\t\t},\n\t\t\"Veigar\": {\n\t\t\t\"id\": 45,\n\t\t\t\"key\": \"Veigar\",\n\t\t\t\"name\": \"Veigar\",\n\t\t\t\"title\": \"the Tiny Master of Evil\"\n\t\t},\n\t\t\"Bard\": {\n\t\t\t\"id\": 432,\n\t\t\t\"key\": \"Bard\",\n\t\t\t\"name\": \"Bard\",\n\t\t\t\"title\": \"the Wandering Caretaker\"\n\t\t},\n\t\t\"Gnar\": {\n\t\t\t\"id\": 150,\n\t\t\t\"key\": \"Gnar\",\n\t\t\t\"name\": \"Gnar\",\n\t\t\t\"title\": \"the Missing Link\"\n\t\t},\n\t\t\"Malzahar\": {\n\t\t\t\"id\": 90,\n\t\t\t\"key\": \"Malzahar\",\n\t\t\t\"name\": \"Malzahar\",\n\t\t\t\"title\": \"the Prophet of the Void\"\n\t\t},\n\t\t\"Graves\": {\n\t\t\t\"id\": 104,\n\t\t\t\"key\": \"Graves\",\n\t\t\t\"name\": \"Graves\",\n\t\t\t\"title\": \"the Outlaw\"\n\t\t},\n\t\t\"Vi\": {\n\t\t\t\"id\": 254,\n\t\t\t\"key\": \"Vi\",\n\t\t\t\"name\": \"Vi\",\n\t\t\t\"title\": \"the Piltover Enforcer\"\n\t\t},\n\t\t\"Kayle\": {\n\t\t\t\"id\": 10,\n\t\t\t\"key\": \"Kayle\",\n\t\t\t\"name\": \"Kayle\",\n\t\t\t\"title\": \"The Judicator\"\n\t\t},\n\t\t\"Irelia\": {\n\t\t\t\"id\": 39,\n\t\t\t\"key\": \"Irelia\",\n\t\t\t\"name\": \"Irelia\",\n\t\t\t\"title\": \"the Will of the Blades\"\n\t\t},\n\t\t\"LeeSin\": {\n\t\t\t\"id\": 64,\n\t\t\t\"key\": \"LeeSin\",\n\t\t\t\"name\": \"Lee Sin\",\n\t\t\t\"title\": \"the Blind Monk\"\n\t\t},\n\t\t\"Illaoi\": {\n\t\t\t\"id\": 420,\n\t\t\t\"key\": \"Illaoi\",\n\t\t\t\"name\": \"Illaoi\",\n\t\t\t\"title\": \"the Kraken Priestess\"\n\t\t},\n\t\t\"Elise\": {\n\t\t\t\"id\": 60,\n\t\t\t\"key\": \"Elise\",\n\t\t\t\"name\": \"Elise\",\n\t\t\t\"title\": \"the Spider Queen\"\n\t\t},\n\t\t\"Volibear\": {\n\t\t\t\"id\": 106,\n\t\t\t\"key\": \"Volibear\",\n\t\t\t\"name\": \"Volibear\",\n\t\t\t\"title\": \"the Thunder's Roar\"\n\t\t},\n\t\t\"Nunu\": {\n\t\t\t\"id\": 20,\n\t\t\t\"key\": \"Nunu\",\n\t\t\t\"name\": \"Nunu\",\n\t\t\t\"title\": \"the Yeti Rider\"\n\t\t},\n\t\t\"TwistedFate\": {\n\t\t\t\"id\": 4,\n\t\t\t\"key\": \"TwistedFate\",\n\t\t\t\"name\": \"Twisted Fate\",\n\t\t\t\"title\": \"the Card Master\"\n\t\t},\n\t\t\"Jax\": {\n\t\t\t\"id\": 24,\n\t\t\t\"key\": \"Jax\",\n\t\t\t\"name\": \"Jax\",\n\t\t\t\"title\": \"Grandmaster at Arms\"\n\t\t},\n\t\t\"Shyvana\": {\n\t\t\t\"id\": 102,\n\t\t\t\"key\": \"Shyvana\",\n\t\t\t\"name\": \"Shyvana\",\n\t\t\t\"title\": \"the Half-Dragon\"\n\t\t},\n\t\t\"Kalista\": {\n\t\t\t\"id\": 429,\n\t\t\t\"key\": \"Kalista\",\n\t\t\t\"name\": \"Kalista\",\n\t\t\t\"title\": \"the Spear of Vengeance\"\n\t\t},\n\t\t\"DrMundo\": {\n\t\t\t\"id\": 36,\n\t\t\t\"key\": \"DrMundo\",\n\t\t\t\"name\": \"Dr. Mundo\",\n\t\t\t\"title\": \"the Madman of Zaun\"\n\t\t},\n\t\t\"TahmKench\": {\n\t\t\t\"id\": 223,\n\t\t\t\"key\": \"TahmKench\",\n\t\t\t\"name\": \"Tahm Kench\",\n\t\t\t\"title\": \"the River King\"\n\t\t},\n\t\t\"Diana\": {\n\t\t\t\"id\": 131,\n\t\t\t\"key\": \"Diana\",\n\t\t\t\"name\": \"Diana\",\n\t\t\t\"title\": \"Scorn of the Moon\"\n\t\t},\n\t\t\"Brand\": {\n\t\t\t\"id\": 63,\n\t\t\t\"key\": \"Brand\",\n\t\t\t\"name\": \"Brand\",\n\t\t\t\"title\": \"the Burning Vengeance\"\n\t\t},\n\t\t\"Sejuani\": {\n\t\t\t\"id\": 113,\n\t\t\t\"key\": \"Sejuani\",\n\t\t\t\"name\": \"Sejuani\",\n\t\t\t\"title\": \"the Winter's Wrath\"\n\t\t},\n\t\t\"Vladimir\": {\n\t\t\t\"id\": 8,\n\t\t\t\"key\": \"Vladimir\",\n\t\t\t\"name\": \"Vladimir\",\n\t\t\t\"title\": \"the Crimson Reaper\"\n\t\t},\n\t\t\"Zac\": {\n\t\t\t\"id\": 154,\n\t\t\t\"key\": \"Zac\",\n\t\t\t\"name\": \"Zac\",\n\t\t\t\"title\": \"the Secret Weapon\"\n\t\t},\n\t\t\"RekSai\": {\n\t\t\t\"id\": 421,\n\t\t\t\"key\": \"RekSai\",\n\t\t\t\"name\": \"Rek'Sai\",\n\t\t\t\"title\": \"the Void Burrower\"\n\t\t},\n\t\t\"Quinn\": {\n\t\t\t\"id\": 133,\n\t\t\t\"key\": \"Quinn\",\n\t\t\t\"name\": \"Quinn\",\n\t\t\t\"title\": \"Demacia's Wings\"\n\t\t},\n\t\t\"Akali\": {\n\t\t\t\"id\": 84,\n\t\t\t\"key\": \"Akali\",\n\t\t\t\"name\": \"Akali\",\n\t\t\t\"title\": \"the Fist of Shadow\"\n\t\t},\n\t\t\"Tristana\": {\n\t\t\t\"id\": 18,\n\t\t\t\"key\": \"Tristana\",\n\t\t\t\"name\": \"Tristana\",\n\t\t\t\"title\": \"the Yordle Gunner\"\n\t\t},\n\t\t\"Hecarim\": {\n\t\t\t\"id\": 120,\n\t\t\t\"key\": \"Hecarim\",\n\t\t\t\"name\": \"Hecarim\",\n\t\t\t\"title\": \"the Shadow of War\"\n\t\t},\n\t\t\"Sivir\": {\n\t\t\t\"id\": 15,\n\t\t\t\"key\": \"Sivir\",\n\t\t\t\"name\": \"Sivir\",\n\t\t\t\"title\": \"the Battle Mistress\"\n\t\t},\n\t\t\"Lucian\": {\n\t\t\t\"id\": 236,\n\t\t\t\"key\": \"Lucian\",\n\t\t\t\"name\": \"Lucian\",\n\t\t\t\"title\": \"the Purifier\"\n\t\t},\n\t\t\"Rengar\": {\n\t\t\t\"id\": 107,\n\t\t\t\"key\": \"Rengar\",\n\t\t\t\"name\": \"Rengar\",\n\t\t\t\"title\": \"the Pridestalker\"\n\t\t},\n\t\t\"Warwick\": {\n\t\t\t\"id\": 19,\n\t\t\t\"key\": \"Warwick\",\n\t\t\t\"name\": \"Warwick\",\n\t\t\t\"title\": \"the Blood Hunter\"\n\t\t},\n\t\t\"Skarner\": {\n\t\t\t\"id\": 72,\n\t\t\t\"key\": \"Skarner\",\n\t\t\t\"name\": \"Skarner\",\n\t\t\t\"title\": \"the Crystal Vanguard\"\n\t\t},\n\t\t\"Malphite\": {\n\t\t\t\"id\": 54,\n\t\t\t\"key\": \"Malphite\",\n\t\t\t\"name\": \"Malphite\",\n\t\t\t\"title\": \"Shard of the Monolith\"\n\t\t},\n\t\t\"Yasuo\": {\n\t\t\t\"id\": 157,\n\t\t\t\"key\": \"Yasuo\",\n\t\t\t\"name\": \"Yasuo\",\n\t\t\t\"title\": \"the Unforgiven\"\n\t\t},\n\t\t\"Xerath\": {\n\t\t\t\"id\": 101,\n\t\t\t\"key\": \"Xerath\",\n\t\t\t\"name\": \"Xerath\",\n\t\t\t\"title\": \"the Magus Ascendant\"\n\t\t},\n\t\t\"Teemo\": {\n\t\t\t\"id\": 17,\n\t\t\t\"key\": \"Teemo\",\n\t\t\t\"name\": \"Teemo\",\n\t\t\t\"title\": \"the Swift Scout\"\n\t\t},\n\t\t\"Renekton\": {\n\t\t\t\"id\": 58,\n\t\t\t\"key\": \"Renekton\",\n\t\t\t\"name\": \"Renekton\",\n\t\t\t\"title\": \"the Butcher of the Sands\"\n\t\t},\n\t\t\"Nasus\": {\n\t\t\t\"id\": 75,\n\t\t\t\"key\": \"Nasus\",\n\t\t\t\"name\": \"Nasus\",\n\t\t\t\"title\": \"the Curator of the Sands\"\n\t\t},\n\t\t\"Draven\": {\n\t\t\t\"id\": 119,\n\t\t\t\"key\": \"Draven\",\n\t\t\t\"name\": \"Draven\",\n\t\t\t\"title\": \"the Glorious Executioner\"\n\t\t},\n\t\t\"Shaco\": {\n\t\t\t\"id\": 35,\n\t\t\t\"key\": \"Shaco\",\n\t\t\t\"name\": \"Shaco\",\n\t\t\t\"title\": \"the Demon Jester\"\n\t\t},\n\t\t\"Swain\": {\n\t\t\t\"id\": 50,\n\t\t\t\"key\": \"Swain\",\n\t\t\t\"name\": \"Swain\",\n\t\t\t\"title\": \"the Master Tactician\"\n\t\t},\n\t\t\"Ziggs\": {\n\t\t\t\"id\": 115,\n\t\t\t\"key\": \"Ziggs\",\n\t\t\t\"name\": \"Ziggs\",\n\t\t\t\"title\": \"the Hexplosives Expert\"\n\t\t},\n\t\t\"Talon\": {\n\t\t\t\"id\": 91,\n\t\t\t\"key\": \"Talon\",\n\t\t\t\"name\": \"Talon\",\n\t\t\t\"title\": \"the Blade's Shadow\"\n\t\t},\n\t\t\"Janna\": {\n\t\t\t\"id\": 40,\n\t\t\t\"key\": \"Janna\",\n\t\t\t\"name\": \"Janna\",\n\t\t\t\"title\": \"the Storm's Fury\"\n\t\t},\n\t\t\"Ekko\": {\n\t\t\t\"id\": 245,\n\t\t\t\"key\": \"Ekko\",\n\t\t\t\"name\": \"Ekko\",\n\t\t\t\"title\": \"the Boy Who Shattered Time\"\n\t\t},\n\t\t\"Orianna\": {\n\t\t\t\"id\": 61,\n\t\t\t\"key\": \"Orianna\",\n\t\t\t\"name\": \"Orianna\",\n\t\t\t\"title\": \"the Lady of Clockwork\"\n\t\t},\n\t\t\"Fiora\": {\n\t\t\t\"id\": 114,\n\t\t\t\"key\": \"Fiora\",\n\t\t\t\"name\": \"Fiora\",\n\t\t\t\"title\": \"the Grand Duelist\"\n\t\t},\n\t\t\"FiddleSticks\": {\n\t\t\t\"id\": 9,\n\t\t\t\"key\": \"FiddleSticks\",\n\t\t\t\"name\": \"Fiddlesticks\",\n\t\t\t\"title\": \"the Harbinger of Doom\"\n\t\t},\n\t\t\"Rammus\": {\n\t\t\t\"id\": 33,\n\t\t\t\"key\": \"Rammus\",\n\t\t\t\"name\": \"Rammus\",\n\t\t\t\"title\": \"the Armordillo\"\n\t\t},\n\t\t\"Chogath\": {\n\t\t\t\"id\": 31,\n\t\t\t\"key\": \"Chogath\",\n\t\t\t\"name\": \"Cho'Gath\",\n\t\t\t\"title\": \"the Terror of the Void\"\n\t\t},\n\t\t\"Leblanc\": {\n\t\t\t\"id\": 7,\n\t\t\t\"key\": \"Leblanc\",\n\t\t\t\"name\": \"LeBlanc\",\n\t\t\t\"title\": \"the Deceiver\"\n\t\t},\n\t\t\"Zilean\": {\n\t\t\t\"id\": 26,\n\t\t\t\"key\": \"Zilean\",\n\t\t\t\"name\": \"Zilean\",\n\t\t\t\"title\": \"the Chronokeeper\"\n\t\t},\n\t\t\"Soraka\": {\n\t\t\t\"id\": 16,\n\t\t\t\"key\": \"Soraka\",\n\t\t\t\"name\": \"Soraka\",\n\t\t\t\"title\": \"the Starchild\"\n\t\t},\n\t\t\"Nocturne\": {\n\t\t\t\"id\": 56,\n\t\t\t\"key\": \"Nocturne\",\n\t\t\t\"name\": \"Nocturne\",\n\t\t\t\"title\": \"the Eternal Nightmare\"\n\t\t},\n\t\t\"Jinx\": {\n\t\t\t\"id\": 222,\n\t\t\t\"key\": \"Jinx\",\n\t\t\t\"name\": \"Jinx\",\n\t\t\t\"title\": \"the Loose Cannon\"\n\t\t},\n\t\t\"Yorick\": {\n\t\t\t\"id\": 83,\n\t\t\t\"key\": \"Yorick\",\n\t\t\t\"name\": \"Yorick\",\n\t\t\t\"title\": \"the Gravedigger\"\n\t\t},\n\t\t\"Urgot\": {\n\t\t\t\"id\": 6,\n\t\t\t\"key\": \"Urgot\",\n\t\t\t\"name\": \"Urgot\",\n\t\t\t\"title\": \"the Headsman's Pride\"\n\t\t},\n\t\t\"Kindred\": {\n\t\t\t\"id\": 203,\n\t\t\t\"key\": \"Kindred\",\n\t\t\t\"name\": \"Kindred\",\n\t\t\t\"title\": \"The Eternal Hunters\"\n\t\t},\n\t\t\"MissFortune\": {\n\t\t\t\"id\": 21,\n\t\t\t\"key\": \"MissFortune\",\n\t\t\t\"name\": \"Miss Fortune\",\n\t\t\t\"title\": \"the Bounty Hunter\"\n\t\t},\n\t\t\"MonkeyKing\": {\n\t\t\t\"id\": 62,\n\t\t\t\"key\": \"MonkeyKing\",\n\t\t\t\"name\": \"Wukong\",\n\t\t\t\"title\": \"the Monkey King\"\n\t\t},\n\t\t\"Blitzcrank\": {\n\t\t\t\"id\": 53,\n\t\t\t\"key\": \"Blitzcrank\",\n\t\t\t\"name\": \"Blitzcrank\",\n\t\t\t\"title\": \"the Great Steam Golem\"\n\t\t},\n\t\t\"Shen\": {\n\t\t\t\"id\": 98,\n\t\t\t\"key\": \"Shen\",\n\t\t\t\"name\": \"Shen\",\n\t\t\t\"title\": \"the Eye of Twilight\"\n\t\t},\n\t\t\"Braum\": {\n\t\t\t\"id\": 201,\n\t\t\t\"key\": \"Braum\",\n\t\t\t\"name\": \"Braum\",\n\t\t\t\"title\": \"the Heart of the Freljord\"\n\t\t},\n\t\t\"XinZhao\": {\n\t\t\t\"id\": 5,\n\t\t\t\"key\": \"XinZhao\",\n\t\t\t\"name\": \"Xin Zhao\",\n\t\t\t\"title\": \"the Seneschal of Demacia\"\n\t\t},\n\t\t\"Twitch\": {\n\t\t\t\"id\": 29,\n\t\t\t\"key\": \"Twitch\",\n\t\t\t\"name\": \"Twitch\",\n\t\t\t\"title\": \"the Plague Rat\"\n\t\t},\n\t\t\"MasterYi\": {\n\t\t\t\"id\": 11,\n\t\t\t\"key\": \"MasterYi\",\n\t\t\t\"name\": \"Master Yi\",\n\t\t\t\"title\": \"the Wuju Bladesman\"\n\t\t},\n\t\t\"Taric\": {\n\t\t\t\"id\": 44,\n\t\t\t\"key\": \"Taric\",\n\t\t\t\"name\": \"Taric\",\n\t\t\t\"title\": \"the Shield of Valoran\"\n\t\t},\n\t\t\"Amumu\": {\n\t\t\t\"id\": 32,\n\t\t\t\"key\": \"Amumu\",\n\t\t\t\"name\": \"Amumu\",\n\t\t\t\"title\": \"the Sad Mummy\"\n\t\t},\n\t\t\"Gangplank\": {\n\t\t\t\"id\": 41,\n\t\t\t\"key\": \"Gangplank\",\n\t\t\t\"name\": \"Gangplank\",\n\t\t\t\"title\": \"the Saltwater Scourge\"\n\t\t},\n\t\t\"Trundle\": {\n\t\t\t\"id\": 48,\n\t\t\t\"key\": \"Trundle\",\n\t\t\t\"name\": \"Trundle\",\n\t\t\t\"title\": \"the Troll King\"\n\t\t},\n\t\t\"Kassadin\": {\n\t\t\t\"id\": 38,\n\t\t\t\"key\": \"Kassadin\",\n\t\t\t\"name\": \"Kassadin\",\n\t\t\t\"title\": \"the Void Walker\"\n\t\t},\n\t\t\"Velkoz\": {\n\t\t\t\"id\": 161,\n\t\t\t\"key\": \"Velkoz\",\n\t\t\t\"name\": \"Vel'Koz\",\n\t\t\t\"title\": \"the Eye of the Void\"\n\t\t},\n\t\t\"Zyra\": {\n\t\t\t\"id\": 143,\n\t\t\t\"key\": \"Zyra\",\n\t\t\t\"name\": \"Zyra\",\n\t\t\t\"title\": \"Rise of the Thorns\"\n\t\t},\n\t\t\"Nami\": {\n\t\t\t\"id\": 267,\n\t\t\t\"key\": \"Nami\",\n\t\t\t\"name\": \"Nami\",\n\t\t\t\"title\": \"the Tidecaller\"\n\t\t},\n\t\t\"JarvanIV\": {\n\t\t\t\"id\": 59,\n\t\t\t\"key\": \"JarvanIV\",\n\t\t\t\"name\": \"Jarvan IV\",\n\t\t\t\"title\": \"the Exemplar of Demacia\"\n\t\t},\n\t\t\"Ezreal\": {\n\t\t\t\"id\": 81,\n\t\t\t\"key\": \"Ezreal\",\n\t\t\t\"name\": \"Ezreal\",\n\t\t\t\"title\": \"the Prodigal Explorer\"\n\t\t}\n\t}\n}");
 
 /***/ },
-/* 173 */
+/* 179 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36554,234 +38364,6 @@
 	  value: true
 	});
 	exports.default = [{ tier: 'BRONZE', color: '#c68c53' }, { tier: 'SILVER', color: '#afb6b5' }, { tier: 'GOLD', color: '#FFD300' }, { tier: 'PLATINUM', color: '#00b3b3' }, { tier: 'DIAMOND', color: '#00aaff' }, { tier: 'MASTER', color: '#bcd0ca)' }, { tier: 'CHALLENGER', color: '#ffd149' }];
-
-/***/ },
-/* 174 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _lodash = __webpack_require__(169);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _ChampSlider = __webpack_require__(171);
-
-	var _ChampSlider2 = _interopRequireDefault(_ChampSlider);
-
-	var _TierColors = __webpack_require__(173);
-
-	var _TierColors2 = _interopRequireDefault(_TierColors);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var colors = {
-	  lolblue: 'rgb(173, 170, 252)',
-	  green: 'rgb(143, 230, 148)',
-	  red: 'rgb(176, 58, 22)'
-	};
-
-	var Stats = function (_React$Component) {
-	  _inherits(Stats, _React$Component);
-
-	  function Stats(props) {
-	    _classCallCheck(this, Stats);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Stats).call(this, props));
-
-	    var d = _this.props.styleData;
-	    var customHeight = d.show_winrate || !d.show_champion && !d.show_tier ? '20px' : '30px';
-	    _this.state = {
-	      visible: false,
-	      token: d.token,
-	      load_animation: d.load_animation,
-	      show_champion: d.show_champion,
-	      show_winrate: d.show_winrate,
-	      show_tier: d.show_tier,
-	      show_web: d.show_web,
-	      align: d.align,
-	      main: {
-	        backgroundColor: _this.rgbaToString(d.back_color),
-	        borderColor: _this.rgbaToString(d.back_border_color),
-	        borderWidth: d.back_border_width + 'px',
-	        borderRadius: d.back_border_radius + 'px',
-	        boxShadow: _this.shadowToString(d.back_shadow) + ' ' + _this.rgbaToString(d.back_shadow_color),
-	        textShadow: _this.shadowToString(d.text_shadow) + ' ' + _this.rgbaToString(d.text_shadow_color)
-	      },
-	      summoner: {
-	        lineHeight: customHeight,
-	        height: customHeight,
-	        color: _this.rgbaToString(d.text_color)
-	      },
-	      tier: {
-	        color: 'white',
-	        lineHeight: customHeight,
-	        height: customHeight
-	      },
-	      mastery_icon: {
-	        boxShadow: _this.shadowToString(d.champ_shadow) + ' ' + _this.rgbaToString(d.champ_shadow_color),
-	        borderColor: _this.rgbaToString(d.champ_border_color),
-	        borderWidth: d.champ_border_width + 'px',
-	        borderRadius: d.champ_border_radius + '%'
-	      },
-	      stats: {}
-	    };
-	    console.log('Initial State:', _this.state);
-	    _this.getStats = _this.getStats.bind(_this);
-	    _this.rgbaToString = _this.rgbaToString.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(Stats, [{
-	    key: 'getStats',
-	    value: function getStats() {
-	      var _this2 = this;
-
-	      console.log('Getting Stats...');
-	      fetch('/stats', {
-	        method: 'GET',
-	        headers: {
-	          Accept: 'application/json'
-	        }
-	      }).then(function (res) {
-	        return res.json();
-	      }).then(function (data) {
-	        console.log('StatsData:', data);
-	        if (!data.error) {
-	          _this2.setState({
-	            visible: true,
-	            stats: data.stats,
-	            tier: {
-	              lineHeight: _this2.state.tier.lineHeight,
-	              height: _this2.state.tier.height,
-	              color: _lodash2.default.find(_TierColors2.default, function (elem) {
-	                return elem.tier === data.stats.tier;
-	              }).color
-	            }
-	          });
-	        } else {
-	          console.log('Error');
-	        }
-	      }).catch(function (error) {
-	        console.log(error);
-	      });
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.getStats();
-	      this.timer = setInterval(this.getStats, 30000);
-	    }
-	  }, {
-	    key: 'rgbaToString',
-	    value: function rgbaToString(color) {
-	      return 'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')';
-	    }
-	  }, {
-	    key: 'shadowToString',
-	    value: function shadowToString(shadow) {
-	      return shadow.h + 'px ' + shadow.v + 'px ' + shadow.b + 'px';
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      if (this.state.visible) {
-	        var percent = (this.state.stats.wins * 100 / (this.state.stats.wins + this.state.stats.losses)).toFixed(1);
-	        // const tiercolor = (_.find(TierColors, (elem) => elem.tier === this.state.stats.tier)).color;
-	        return _react2.default.createElement(
-	          'div',
-	          { id: 'main', style: this.state.main, className: 'animated ' + this.state.load_animation },
-	          this.state.show_champion ? _react2.default.createElement(
-	            'div',
-	            { className: 'col-left' },
-	            _react2.default.createElement(_ChampSlider2.default, { images: this.state.stats.champs, iconstyle: this.state.mastery_icon })
-	          ) : null,
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-center' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'summoner-container', style: { textAlign: this.state.align } },
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'row', id: 'summoner-name', style: this.state.summoner },
-	                this.state.stats.name
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'row', id: 'summoner-tier', style: this.state.tier },
-	                this.state.stats.tier + ' ' + this.state.stats.division + ' ' + this.state.stats.points + 'LP'
-	              ),
-	              this.state.show_winrate ? _react2.default.createElement(
-	                'div',
-	                { className: 'row', id: 'summoner-winratio' },
-	                _react2.default.createElement(
-	                  'span',
-	                  { style: { color: percent < 50 ? colors.red : colors.green } },
-	                  percent,
-	                  '%'
-	                ),
-	                ' - ',
-	                _react2.default.createElement(
-	                  'span',
-	                  { style: { color: colors.green } },
-	                  this.state.stats.wins,
-	                  'W'
-	                ),
-	                ' / ',
-	                _react2.default.createElement(
-	                  'span',
-	                  { style: { color: colors.red } },
-	                  this.state.stats.losses,
-	                  'L'
-	                )
-	              ) : null
-	            )
-	          ),
-	          this.state.show_tier ? _react2.default.createElement(
-	            'div',
-	            { className: 'col-right' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'icon-container' },
-	              _react2.default.createElement('div', { id: 'tier-icon', style: { backgroundImage: 'url(./img/tiers/' + this.state.stats.tier + '.png)' } })
-	            )
-	          ) : null,
-	          this.state.show_web ? _react2.default.createElement(
-	            'div',
-	            { style: { position: 'absolute', left: '20px', top: '90px', fontSize: '13px', color: 'grey' } },
-	            'http://www.lobobot.com'
-	          ) : null
-	        );
-	      } else {
-	        return _react2.default.createElement('i', { className: 'fa fa-spinner fa-pulse fa-3x fa-fw', style: { color: 'grey', margin: 20 } });
-	      }
-	    }
-	  }]);
-
-	  return Stats;
-	}(_react2.default.Component);
-
-	Stats.propTypes = {
-	  styleData: _react2.default.PropTypes.object.isRequired
-	};
-	exports.default = Stats;
 
 /***/ }
 /******/ ]);

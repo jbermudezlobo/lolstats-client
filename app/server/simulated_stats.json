@@ -1,31 +1,51 @@
 {
   "error": false,
-  "token": "AA123BB456CC",
+  "token": "0c7f6e3520fabef0",
   "type": 0,
   "stats": {
-    "name": "Lobo Bot",
-    "id": 12345,
+    "name": "G2V Electrokidi FAKE",
+    "id": "39699214",
     "server": "euw",
-    "tier": "CHALLENGER",
-    "division": "I",
-    "points": 100,
-    "wins": 1040,
-    "losses": 1000,
+    "tier": "DIAMOND",
+    "division": "III",
+    "points": 31,
+    "wins": 427,
+    "losses": 434,
     "champs": [
       {
-        "points": 12144,
-        "champion_id": 1,
-        "img": "MASTER"
+        "playerId": 39699214,
+        "championId": 92,
+        "championLevel": 7,
+        "championPoints": 1675276,
+        "lastPlayTime": 1463940436000,
+        "championPointsSinceLastLevel": 1653676,
+        "championPointsUntilNextLevel": 0,
+        "chestGranted": true,
+        "highestGrade": "S+",
+        "tokensEarned": 0
       },
       {
-        "points": 2523,
-        "champion_id": 50,
-        "img": "SILVER"
+        "playerId": 39699214,
+        "championId": 131,
+        "championLevel": 5,
+        "championPoints": 190884,
+        "lastPlayTime": 1463923780000,
+        "championPointsSinceLastLevel": 169284,
+        "championPointsUntilNextLevel": 0,
+        "chestGranted": true,
+        "highestGrade": "S",
+        "tokensEarned": 0
       },
       {
-        "points": 1000,
-        "champion_id": 3,
-        "img": "GOLD"
+        "playerId": 39699214,
+        "championId": 76,
+        "championLevel": 5,
+        "championPoints": 27276,
+        "lastPlayTime": 1452816663000,
+        "championPointsSinceLastLevel": 5676,
+        "championPointsUntilNextLevel": 0,
+        "chestGranted": false,
+        "tokensEarned": 0
       }
     ]
   }

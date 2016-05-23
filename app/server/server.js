@@ -12,7 +12,7 @@ app.get('/', function (req, res) {
   res.render('index', { styleData: JSON.stringify(data) });
 });
 
-app.get('/stats', function (req, res) {
+app.post('/stats', function (req, res) {
   console.log('GET --> /stats');
   res.json(simulated_stats);
 });

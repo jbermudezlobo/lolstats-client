@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import champions from './../utils/champions.js';
+import champions from './utils/champions.js';
 
 class ChampSlider extends React.Component {
   constructor(props) {
@@ -36,11 +36,11 @@ class ChampSlider extends React.Component {
   render() {
     const style = {};
     Object.assign(style, this.props.iconstyle);
-    style.backgroundImage = `url(${ this.getChampionUrl(this.state.champs[this.state.active].champion_id) })`;
+    style.backgroundImage = `url(${ this.getChampionUrl(this.state.champs[this.state.active].championId) })`;
     return (
       <div className='mastery-icon' style={ style }>
         <div className='mastery-text'>
-          {`#${this.state.active + 1} ${this.fPoints(this.state.champs[this.state.active].points)}`}
+          {`#${this.state.active + 1} ${this.fPoints(this.state.champs[this.state.active].championPoints)}`}
         </div>
       </div>
     )
