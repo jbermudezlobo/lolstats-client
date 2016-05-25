@@ -33,7 +33,7 @@ app.get('/stats/:server/:summonername/:apikey', function (req, res) {
 
 })
 
-var server = app.listen(3000, function () {
+var server = app.listen(3001, function () {
   var port = server.address().port;
   console.log("Server listening at http://localhost:%s", port);
 })

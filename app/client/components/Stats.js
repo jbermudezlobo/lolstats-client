@@ -78,7 +78,8 @@ class Stats extends React.Component {
     console.log('Getting stats...');
     ajax
     .post('http://test.lobobot.com/actions/getstats.php')
-    .send('token=' + this.state.token)
+    //.get('http://localhost:3000/stats2/euw/39699214')
+    .send(`token=${this.state.token}`)
     .accept('json')
     .end((err, res) => {
       if (!err) {
@@ -101,7 +102,7 @@ class Stats extends React.Component {
   componentDidMount() {
     this.getStatsAjax();
     if (this.state.token !== 'NOTOKEN') {
-      this.timer = setInterval(this.getStatsAjax, 15000);
+      this.timer = setInterval(this.getStatsAjax, 900000);
     }
   }
 
