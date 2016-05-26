@@ -20284,14 +20284,13 @@
 	    value: function getStatsAjax() {
 	      var _this3 = this;
 
+	      var currentdate = new Date().getTime();
 	      this.setState({ isLoading: true });
-	      console.log('Getting stats...');
-	      _superagent2.default.post('http://test.lobobot.com/actions/getstats.php')
-	      //.get('http://localhost:3000/stats2/euw/39699214')
-	      .send('token=' + this.state.token).accept('json').end(function (err, res) {
+	      console.log('Getting stats at:', new Date());
+	      _superagent2.default.post('/actions/getstats.php').send('token=' + this.state.token).accept('json').end(function (err, res) {
 	        if (!err) {
 	          var _data = res.body;
-	          console.log('StatsData:', _data);
+	          console.log('Done (' + (new Date().getTime() - currentdate - 70) + 'ms)');
 	          if (!_data.error) {
 	            _this3.setState({
 	              visible: true,
@@ -20309,9 +20308,7 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.getStatsAjax();
-	      if (this.state.token !== 'NOTOKEN') {
-	        this.timer = setInterval(this.getStatsAjax, 900000);
-	      }
+	      this.timer = setInterval(this.getStatsAjax, 20 * 60 * 1000);
 	    }
 	  }, {
 	    key: 'rgbaToString',

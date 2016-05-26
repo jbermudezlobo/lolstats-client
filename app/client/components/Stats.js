@@ -74,17 +74,17 @@ class Stats extends React.Component {
   }
 
   getStatsAjax(){
+    const currentdate = new Date().getTime();
     this.setState({ isLoading: true });
-    console.log('Getting stats...');
+    console.log('Getting stats at:', new Date());
     ajax
-    .post('http://test.lobobot.com/actions/getstats.php')
-    //.get('http://localhost:3000/stats2/euw/39699214')
+    .post('/actions/getstats.php')
     .send(`token=${this.state.token}`)
     .accept('json')
     .end((err, res) => {
       if (!err) {
         const _data = res.body;
-        console.log('StatsData:', _data);
+        console.log(`Done (${new Date().getTime() - currentdate - 70}ms)`);
         if(!_data.error) {
           this.setState({
             visible: true,
@@ -101,9 +101,7 @@ class Stats extends React.Component {
 
   componentDidMount() {
     this.getStatsAjax();
-    if (this.state.token !== 'NOTOKEN') {
-      this.timer = setInterval(this.getStatsAjax, 900000);
-    }
+    this.timer = setInterval(this.getStatsAjax, 20 * 60 * 1000);
   }
 
   rgbaToString(color) { return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`; }

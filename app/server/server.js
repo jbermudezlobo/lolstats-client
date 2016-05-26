@@ -12,8 +12,8 @@ app.get('/', function (req, res) {
   res.render('index', { styleData: JSON.stringify(data) });
 });
 
-app.post('/stats', function (req, res) {
-  console.log('GET --> /stats');
+app.post('/actions/getstats.php', function (req, res) {
+  console.log('POST --> /stats');
   res.json(simulated_stats);
 });
 
