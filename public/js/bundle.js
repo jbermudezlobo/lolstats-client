@@ -20239,7 +20239,6 @@
 	      visible: false,
 	      styleData: _this.props.styleData
 	    };
-	    _this.getStats = _this.getStats.bind(_this);
 	    _this.getStatsAjax = _this.getStatsAjax.bind(_this);
 	    _this.rgbaToString = _this.rgbaToString.bind(_this);
 	    _this.shadowToString = _this.shadowToString.bind(_this);
@@ -20247,52 +20246,18 @@
 	  }
 
 	  _createClass(Stats, [{
-	    key: 'getStats',
-	    value: function getStats() {
-	      var _this2 = this;
-
-	      this.setState({ isLoading: true });
-	      console.log('Getting stats...', this.state.token);
-	      var formdata = new FormData();
-	      formdata.append('token', '' + this.state.token);
-	      var options = {
-	        method: 'POST',
-	        headers: {
-	          'Content-Type': 'application/json'
-	        },
-	        body: formdata
-	      };
-	      console.log(options);
-	      fetch('http://test.lobobot.com/actions/getstats.php', options).then(function (res) {
-	        return res.json();
-	      }).then(function (_data) {
-	        console.log('StatsData:', _data);
-	        if (!_data.error) {
-	          _this2.setState({
-	            visible: true,
-	            stats: _data.stats
-	          });
-	        } else {
-	          console.log('Error:', _data.error);
-	        }
-	      }).catch(function (err) {
-	        return console.log('Error:', err);
-	      });
-	    }
-	  }, {
 	    key: 'getStatsAjax',
 	    value: function getStatsAjax() {
-	      var _this3 = this;
+	      var _this2 = this;
 
 	      var currentdate = new Date().getTime();
-	      this.setState({ isLoading: true });
 	      console.log('Getting stats at:', new Date());
 	      _superagent2.default.post('/actions/getstats.php').send('token=' + this.state.token).accept('json').end(function (err, res) {
 	        if (!err) {
 	          var _data = res.body;
-	          console.log('Done (' + (new Date().getTime() - currentdate - 70) + 'ms)');
+	          console.log('Done (' + (new Date().getTime() - currentdate) + 'ms)');
 	          if (!_data.error) {
-	            _this3.setState({
+	            _this2.setState({
 	              visible: true,
 	              stats: _data.stats
 	            });
@@ -20323,7 +20288,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this4 = this;
+	      var _this3 = this;
 
 	      if (this.state.visible) {
 
@@ -20356,7 +20321,7 @@
 	          },
 	          tier: {
 	            color: _lodash2.default.find(_TierColors2.default, function (elem) {
-	              return elem.tier === _this4.state.stats.tier;
+	              return elem.tier === _this3.state.stats.tier;
 	            }).color,
 	            lineHeight: customHeight,
 	            height: customHeight

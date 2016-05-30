@@ -7,6 +7,8 @@ var ajax = require('superagent');
 app.set('view engine', 'ejs');
 app.use('/', express.static('public'));
 
+function randomIntFromInterval(min,max) { return Math.floor(Math.random()*(max-min+1)+min); }
+
 app.get('/', function (req, res) {
   console.log('GET --> /');
   res.render('index', { styleData: JSON.stringify(data) });
@@ -14,6 +16,9 @@ app.get('/', function (req, res) {
 
 app.post('/actions/getstats.php', function (req, res) {
   console.log('POST --> /stats');
+  simulated_stats.stats.points = randomIntFromInterval(0, 100);
+  simulated_stats.stats.wins = randomIntFromInterval(0, 500);
+  simulated_stats.stats.losses = randomIntFromInterval(0, 500);
   res.json(simulated_stats);
 });
 

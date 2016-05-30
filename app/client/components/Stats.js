@@ -37,45 +37,13 @@ class Stats extends React.Component {
       visible: false,
       styleData: this.props.styleData,
     };
-    this.getStats = this.getStats.bind(this);
     this.getStatsAjax = this.getStatsAjax.bind(this);
     this.rgbaToString = this.rgbaToString.bind(this);
     this.shadowToString = this.shadowToString.bind(this);
   };
 
-  getStats(){
-    this.setState({ isLoading: true });
-    console.log('Getting stats...', this.state.token);
-    var formdata = new FormData();
-    formdata.append('token', `${this.state.token}`);
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: formdata
-    };
-    console.log(options);
-    fetch('http://test.lobobot.com/actions/getstats.php',
-      options
-    ).then((res) => {
-      return res.json();
-    }).then((_data) => {
-      console.log('StatsData:', _data);
-      if(!_data.error) {
-        this.setState({
-          visible: true,
-          stats: _data.stats,
-        });
-      } else {
-        console.log('Error:', _data.error);
-      }
-    }).catch((err) => console.log('Error:', err));
-  }
-
   getStatsAjax(){
     const currentdate = new Date().getTime();
-    this.setState({ isLoading: true });
     console.log('Getting stats at:', new Date());
     ajax
     .post('/actions/getstats.php')
@@ -84,7 +52,7 @@ class Stats extends React.Component {
     .end((err, res) => {
       if (!err) {
         const _data = res.body;
-        console.log(`Done (${new Date().getTime() - currentdate - 70}ms)`);
+        console.log(`Done (${new Date().getTime() - currentdate}ms)`);
         if(!_data.error) {
           this.setState({
             visible: true,
