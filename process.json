@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "name": "monitor",
+      "script": "/home/lobo/nodejs/mon/app/server/server.js",
+      "instances": 4,
+      "exec_mode": "cluster"
+    },
+    {
+      "name": "bot",
+      "script": "/home/lobo/nodejs/bot/index.js"
+    }
+  ]
+}
